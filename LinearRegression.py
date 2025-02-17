@@ -9,8 +9,8 @@ dados_brutos = {
 dados = pd.DataFrame(data=dados_brutos)
 
 # Defina as Variáveis
-x = dados["GE"].tolist()
-y = dados["GA"].tolist()
+x = dados["GE"]
+y = dados["GA"]
 
 # Adicione o termo constante B0
 x = sm.add_constant(x)
