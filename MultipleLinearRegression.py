@@ -4,23 +4,24 @@ import statsmodels.api as sm
 
 # Cria uma tabela com os dados
 dados_brutos = {
-    "VDependente": [10, 15, 30, 16, 20, 12],
-    "VIndependente1": [25, 30, 35, 28, 25, 25],
-    "VIndependente2": [22, 20, 24, 16, 18, 24],
+    "VDependente": [20, 40, 5, 25, 2],
+    "VIndependente1": [8, 5, 15, 8, 20],
+    "VIndependente2": [0, 1, 0, 1, 0],
 }
-dados = pd.DataFrame(data=dados_brutos)
 
-# Defina a matriz inicial
+## Fazendo todos os cálculos de maneira manual
+# Defina a matriz Inicial
+PrimeiroElemento = np.full(len(dados_brutos["VDependente"]), 1)
 VariavelIndependenteTransposta = np.array(
-    [[1, 1, 1, 1, 1, 1], dados["VIndependente1"], dados["VIndependente2"]]
+    [PrimeiroElemento, dados_brutos["VIndependente1"], dados_brutos["VIndependente2"]]
 )
 VariavelIndependente = np.transpose(VariavelIndependenteTransposta)
-VariavelDependente = dados["VDependente"]
+VariavelDependente = dados_brutos["VDependente"]
 
-print("Matriz das variáveis independentes\n")
+print("Matriz das variáveis independentes\nX =")
 print(VariavelIndependente)
 print("-------\n")
-print("Matriz transposta das variáveis independentes\n")
+print("Matriz transposta das variáveis independentes\nX' =")
 print(VariavelIndependenteTransposta)
 print("-------\n")
 
@@ -29,7 +30,7 @@ MultiplicacaoVariavelIndependente = np.matmul(
     VariavelIndependenteTransposta, VariavelIndependente
 )
 print(
-    "Produto da matriz transposta das variáveis independentes pela matriz das variáveis indepentes\n"
+    "Produto da matriz transposta das variáveis independentes pela matriz das variáveis independentes\nX'X ="
 )
 print(MultiplicacaoVariavelIndependente)
 print("-------\n")
@@ -38,7 +39,7 @@ print("-------\n")
 MultiplicacaoVariavelIndependenteInversa = np.linalg.inv(
     MultiplicacaoVariavelIndependente
 )
-print("Matriz inversa do produto anterior\n")
+print("Matriz inversa do produto anterior\n(X'X)^-1 =")
 print(MultiplicacaoVariavelIndependenteInversa)
 print("-------\n")
 
@@ -47,19 +48,23 @@ MultiplicacaoVariavelIndependenteDependente = np.matmul(
     VariavelIndependenteTransposta, VariavelDependente
 )
 print(
-    "Produto da matriz transposta das variáveis independentes pela matriz da variável dependente\n"
+    "Produto da matriz transposta das variáveis independentes pela matriz da variável dependente\nX'Y ="
 )
 print(MultiplicacaoVariavelIndependenteDependente)
 print("-------\n")
 
-# Obtem o resultado
+# Obtém o resultado
 Resultado = np.matmul(
     MultiplicacaoVariavelIndependenteInversa,
     MultiplicacaoVariavelIndependenteDependente,
 )
-print("Matriz contendo todos os Betas")
+print("Matriz contendo todos os Betas\nB = (X'X)^-1 * X'Y =")
 print(Resultado)
 print("-------\n")
+
+## Utilizando o Statsmodels para fazer todos os cálculos
+# Cria um dataframe com os dados
+dados = pd.DataFrame(data=dados_brutos)
 
 # Defina as Variáveis
 x = np.array(dados[["VIndependente1", "VIndependente2"]])
@@ -70,6 +75,10 @@ x = sm.add_constant(x)
 
 # Executa o modelo e realiza a função de ajuste (fit)
 result = sm.OLS(y, x).fit()
+VarianceCovariance = result.cov_params()
 
 # Sumário de resultados
 print(result.summary())
+
+# Matriz de variância Covariância
+print(VarianceCovariance)

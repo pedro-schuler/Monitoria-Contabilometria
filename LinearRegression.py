@@ -3,14 +3,14 @@ import statsmodels.api as sm
 
 # Cria uma tabela com os dados
 dados_brutos = {
-    "GE": [5.27, 18, 0.59, 1.05, 2.52, 0.88],
-    "GA": [1.03, 1.61, 0.7, 0.64, 1.01, 0.57],
+    "NProc": [8, 5, 15, 8, 20],
+    "Ativo": [20, 40, 5, 25, 2],
 }
 dados = pd.DataFrame(data=dados_brutos)
 
 # Defina as Variáveis
-x = dados["GE"]
-y = dados["GA"]
+x = dados["NProc"]
+y = dados["Ativo"]
 
 # Adicione o termo constante B0
 x = sm.add_constant(x)
