@@ -2,12 +2,26 @@ import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 
+# Define se estamos utilizando um modelo log-log ou log-lin
+loglog = False
+loglin = False
+
 # Cria uma tabela com os dados
 dados_brutos = {
     "VDependente": [20, 40, 5, 25, 2],
     "VIndependente1": [8, 5, 15, 8, 20],
     "VIndependente2": [0, 1, 0, 1, 0],
 }
+
+# Se utilizarmos um modelo log-lin, a variável dependente será log-linearizada
+if loglin:
+    dados_brutos["VDependente"] = np.log(dados_brutos["VDependente"])
+
+# Se utilizarmos um modelo log-log, todas as variáveis serão log-linearizadas
+if loglog:
+    dados_brutos["VDependente"] = np.log(dados_brutos["VDependente"])
+    dados_brutos["VIndependente1"] = np.log(dados_brutos["VIndependente1"])
+    dados_brutos["VIndependente2"] = np.log(dados_brutos["VIndependente2"])
 
 ## Fazendo todos os cálculos de maneira manual
 # Defina a matriz Inicial
