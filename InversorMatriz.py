@@ -9,15 +9,4 @@ matriz_original = np.array(
     ]
 )
 matriz_inversa = inv(matriz_original)
-
-matriz_calculada = np.array(
-    [
-        [-9 / 45, 0, 18 / 45],
-        [0, 10 / 45, -5 / 45],
-        [18 / 45, -5 / 45, -11 / 45],
-    ],
-)
-
 print(matriz_inversa)
-print("------------")
-print(matriz_calculada)
