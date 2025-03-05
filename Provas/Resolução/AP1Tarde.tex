@@ -1,0 +1,185 @@
+\chapter{Prova da Tarde}
+\section{Letra a}
+\begin{center}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        N & Ativo (Y) & NProcessos (X) & \(X \times Y\) & \(X^2\)  \\ \hline
+        1 & 20 & 8 & 160 & 64 \\ \hline
+        2 & 40 & 5 & 200 & 25 \\ \hline
+        3 & 5 & 15 & 75 & 225 \\ \hline
+        4 & 25 & 8 & 200 & 64 \\ \hline
+        5 & 2 & 20 & 40 & 400 \\ \hline
+        \(\sum\) & 92 & 56 & 675 & 778 \\ \hline
+    \end{tabular}
+\end{center}
+\(\beta_{1}\) pode ser definido da seguinte forma:
+\[\beta_{1} = \frac{n \times \sum (X_{i}Y_{i}) - \sum Y_{i}\sum X_{i}}{n \times \sum X^2 - (\sum X_{i})^2}\]
+Agora podemos utilizar os valores da tabela criada para calcular \(\beta_{1}\).
+\[ \beta_{1} = \frac{5 \times 675 - 92 \times 56}{5 \times 778 - (56)^2} = -2,35676 \]
+\(\beta_{0}\) pode ser definido como \(\beta_{0} = \bar{Y} - \beta_{1} \times \bar{X}\), logo:
+\[ \beta_{0} = \frac{92}{5} + 2,35676 \times \frac{56}{5} = 44,79576 \]
+
+Agora que temos os valores de \(\beta_{0}\) e \(\beta_{1}\) podemos interpretar o seguinte: na ausência de processos (quando o número de processos \(= 0\)) o valor do ativo da empresa é, em média, de R\$ 44,79576 milhões de reais. O \(\beta_{1}\) nos informa que, quando o número de processos aumenta em uma unidade, o valor do ativo decresce, em média, em R\$ 2,35676 milhões de reais.
+
+\section{letra b}
+A variável setor é uma variável qualitativa nominal, porém pode ser expressa como uma variável binária. Para tanto podemos escrever que \textit{serviço} \(= 0\) e \textit{comércio} \(= 1\).
+
+Com isso temos a seguinte tabela:
+
+\begin{center}
+    \begin{tabular}{|c|c|c|}
+        \hline
+         Ativo & N Processos & Setor \\ \hline
+         20 & 8 & 0 \\ \hline
+         40 & 5 & 1 \\ \hline
+         5 & 15 & 0 \\ \hline
+         25 & 8 & 1 \\ \hline
+         2 & 20 & 0 \\ \hline
+    \end{tabular}
+\end{center}
+
+A partir disso podemos construir a matriz \(X\).
+\[ X =
+    \begin{bmatrix}
+        1 & 8 & 0 \\
+        1 & 5 & 1 \\
+        1 & 15 & 0 \\
+        1 & 8 & 1 \\
+        1 & 20 & 0
+    \end{bmatrix}
+\]
+Também podemos construir a matriz \(Y\).
+\[ Y =
+    \begin{bmatrix}
+        20 \\
+        40 \\
+        5 \\
+        25 \\
+        2
+    \end{bmatrix}
+\]
+
+Para proceder ao cálculo de \((X'X)^{-1}\) primeiro precisamos escrever \(X'\).
+
+\[
+    X' =
+    \begin{bmatrix}
+        1 & 1 & 1 & 1 & 1 \\
+        8 & 5 & 15 & 8 & 20 \\
+        0 & 1 & 0 & 1 & 0
+    \end{bmatrix}
+\]
+Logo, multiplicando \(X'\) por \(X\), obtemos:
+
+\[
+    X'X =
+    \begin{bmatrix}
+        5 & 56 & 2 \\
+        56 & 778 & 13 \\
+        2 & 13 & 2
+    \end{bmatrix}
+\]
+
+Invertendo a matriz \(X'X\) (aqui também podemos utilizar as frações obtidas) obtemos:
+
+\[
+    (X'X)^{-1} =
+    \begin{bmatrix}
+        2,99568 & 0,18574 & -1,78834 \\
+        0,18574 & 0,01296 & 0,10151 \\
+        -1,78834 & 0,10151 & 1,62851
+    \end{bmatrix}
+\]
+
+Multiplicamos agora a matriz \(X'\) pela matriz \(Y\):
+\[
+    X'Y =
+    \begin{bmatrix}
+        92 \\
+        675 \\
+        65
+    \end{bmatrix}
+\]
+ Por fim obtemos o produto de \((X'X)^{-1}\) por \(X'Y\):
+ \[
+    (X'X)^{-1}X'Y = \beta =
+    \begin{bmatrix}
+        33,98272 \\
+        -1,74298 \\
+        9,84665
+    \end{bmatrix} =
+    \begin{bmatrix}
+        \beta_{0} \\
+        \beta_{1} \\
+        \beta_{2}
+    \end{bmatrix}
+ \]
+
+Após calculados os valores de \(\beta\) podemos interpretar que: para empresas do setor de \textit{serviços} e que não possuem nenhum processo, o valor do ativo é, em média, de R\$ 33,98272 \((\beta_{0})\) milhões de reais. Quando o número de processos aumenta em 1 unidade, o valor do ativo diminui, em média, em R\$ 1,74298 \((\beta_{1})\) milhões de reais. As empresas do setor de \textit{comércio} têm, em média, um ativo R\$ 9,85665 \((\beta_{2})\) milhões de reais maior que os das empresas do setor de \textit{serviços}.
+
+Para obtermos a matriz de variância-covariância precisamos primeiro calcular \(S^{2}\). Sabemos que:
+\[ \beta_{0} = 33,99272 \]
+\[ \beta_{1} = -1,74298 \]
+\[ \beta_{2} = 9,84665 \]
+
+Primeiro calcularemos a soma do quadrado dos resíduos \((SQR)\).
+\[ [ 20 - (\beta_{0} + \beta_{1} \times 8 + \beta_{2} \times 0)]^2 = 0,00151\]
+\[ [ 40 - (\beta_{0} + \beta_{1} \times 5 + \beta_{2} \times 1)]^2 = 23,86840\]
+\[ [ 5 - (\beta_{0} + \beta_{1} \times 15 + \beta_{2} \times 0)]^2 = 8,05436\]
+\[ [ 25 - (\beta_{0} + \beta_{1} \times 8 + \beta_{2} \times 1)]^2 = 23,86840\]
+\[ [ 2 - (\beta_{0} + \beta_{1} \times 20 + \beta_{2} \times 0)]^2 = 8,25644\]
+\[ \sum u^{2} = 64,06911\]
+
+Sabemos que:
+\[ S^{2} = \frac{\sum u^{2}}{n-k}\textrm{, onde }k = 3\]
+\[S^{2} = \frac{64,06911}{5 - 3} = 32,03456\]
+
+Sabemos ainda que:
+\[
+    (X'X)^{-1} =
+    \begin{bmatrix}
+        2,99568 & 0,18574 & -1,78834 \\
+        0,18574 & 0,01296 & 0,10151 \\
+        -1,78834 & 0,10151 & 1,62851
+    \end{bmatrix}
+\]
+
+A partir disso podemos calcular a variância de \(\beta_{1}\)
+\[ Var(\beta_{1}) = S^{2} \times 0,01296 = 32,03456 \times 0,01296 = 0,4151\]
+
+Podemos calcular o nosso intervalo a partir disso:
+\[ [\beta^{*}_{1}-Var(\beta^{*}_{1});\beta^{*}_{1}+Var(\beta^{*}_{1})]\]
+\[[-1,74298-0,4151;-1,74298+0,4151]\]
+\[[-2,1581;-1,3278]\]
+
+O \(\beta_{1}\) da regressão simples é igual a \(-2,35676\) e está, portanto, fora do intervalo definido. Logo, concluímos que \textbf{há} evidências de que \(H_{1}\) foi violada.
+
+\section{letra c}
+Sabemos que \(R^{2} = 1 - \frac{SQR}{SQT}\).
+
+E da letra b) sabemos que \(SQR = 64,06911\).
+
+Calculemos agora \(SQT\).
+\[\bar{Y} = \frac{92}{5} = 18,4\]
+\[SQT = \sum (Y - \bar{Y})^{2}\]
+\[(Y_{1} - \bar{Y})^2 = (20 - 18,4)^2 = 2,56\]
+\[(Y_{2} - \bar{Y})^2 = (40 - 18,4)^2 = 466,56\]
+\[(Y_{3} - \bar{Y})^2 = (5 - 18,4)^2 = 179,56\]
+\[(Y_{4} - \bar{Y})^2 = (25 - 18,4)^2 = 43,56\]
+\[(Y_{5} - \bar{Y})^2 = (2 - 18,4)^2 = 268,96\]
+\[SQT = \sum (Y - \bar{Y})^{2} = 961,2\]
+Portanto podemos calcular \(SQT\) da seguinte forma:
+\[R^{2} = 1 - \frac{SQR}{SQT} = 1 - \frac{64,06911}{961,2} = 0,93334\]
+Isso nos diz que 93,33\% da variabilidade de Y é explicada pelos seus regressores, ou seja, quão bom é o ajuste da nossa reta de regressão aos dados.
+
+\section{letra d}
+Para atender ao Teorema de Gauss-Markov precisamos \textbf{necessariamente} atender \(H_{1}-H_{4}\). Vimos na letra b) que possivelmente  o modelo da letra a) violou \(H_{1}\). Entretanto nada sugere que o modelo da letra b) também violou \(H_{1}\). Como foi necessário assumirmos \(H_{1}-H_{2}\) para construção do modelo, e caso não haja correlação entre os erros de diferentes observações, bem como a variância dos erros deverá ser constante, podemos dizer que o modelo da letra; b) atende ao teorema de Gauss-Markov, diferentemente do modelo da letra a).
+
+\section{letra e}
+Como o modelo possui um regressor a mais, não podemos comparar diretamente os dois modelos, pois \(R^{2}\) é uma função não decrescente em \(X\). Para tanto precisamos utilizar o \(R^{2}\) ajustado.
+
+O \(R^{2}\) ajustado é dado por:
+\[ \bar{R}^{2} = 1 - \frac{SQR}{SQT} \times \frac{n - 1}{n - k}\]
+Logo,
+\[\bar{R}^{2}_{multipla} = 1 - \frac{64,06911}{961,2} \times \frac{5 - 1}{5 - 3} = 0,86669\]
+Como informado na questão, \(\bar{R}^{2}_{simples} = 0,8285\), portanto o modelo que melhor se ajusta aos dados é o da regressão múltipla.
