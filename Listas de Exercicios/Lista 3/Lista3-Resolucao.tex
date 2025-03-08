@@ -1,0 +1,214 @@
+\chapter{Questão 1}
+\section*{letra a}
+\begin{center}
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        N & Preço da Ação (Y) & Gastos dos Pares (X) & ln(Y) & \(X \times Y\) & \(X^2\)  \\ \hline
+        1 & 21 & 35 & 3,045 & 106,575 & 1225\\ \hline
+        2 & 23,5 & 28 & 3,157 & 88,396 & 784\\ \hline
+        3 & 14,6 & 60 & 2,681 & 160,860 & 3600\\ \hline
+        4 & 13,1 & 71 & 2,573 & 182,683 & 5041\\ \hline
+        5 & 20 & 44 & 2,996 & 131,824 & 1936\\ \hline
+        6 & 18,1 & 45 & 2,896 & 130,320 & 2025\\ \hline
+        7 & 20,2 & 58 & 3,006 & 174,348 & 3364\\ \hline
+        8 & 18,5 & 44 & 2,918 & 128,392 & 1936\\ \hline
+        \(\sum\) & 149 & 385 & 23,272 & 1103,398 & 19911\\ \hline
+    \end{tabular}
+\end{center}
+\(\beta_{1}\) pode ser definido da seguinte forma:
+\[\beta_{1} = \frac{n \times \sum (X_{i}Y_{i}) - \sum Y_{i}\sum X_{i}}{n \times \sum X^2 - (\sum X_{i})^2}\]
+Agora podemos utilizar os valores da tabela criada para calcular \(\beta_{1}\).
+\[ \beta_{1} = \frac{8 \times 1103,398 - 385 \times 23,272}{8 \times 19911 - (385)^2} = -0,012 \]
+\(\beta_{0}\) pode ser definido como \(\beta_{0} = \bar{Y} - \beta_{1} \times \bar{X}\), logo:
+\[ \beta_{0} = \frac{23,272}{8} + 0,012 \times \frac{48,125}{8} = 3,486 \]
+
+Agora que temos os valores de \(\beta_{0}\) e \(\beta_{1}\) podemos interpretar o seguinte: na ausência de gastos dos pares (quando o gasto dos pares \(= 0)\), o preço da ação será, em média, 3,486. O \(\beta_{1}\) nos informa que, quando o gasto dos pares aumenta em uma unidade, o preço da ação decresce, em média, \(1,2\%\).
+\section*{letra b}
+A variável setor é uma variável qualitativa nominal, porém pode ser expressa como uma variável binária. Para tanto podemos escrever que \textit{serviço} \(= 0\) e \textit{comércio} \(= 1\). Com isso temos a seguinte tabela:
+
+\begin{center}
+    \begin{tabular}{|c|c|c|}
+        \hline
+         Ativo & N Processos & Setor \\ \hline
+         20 & 8 & 0 \\ \hline
+         40 & 5 & 0 \\ \hline
+         5 & 15 & 1 \\ \hline
+         25 & 8 & 1 \\ \hline
+         2 & 20 & 0 \\ \hline
+    \end{tabular}
+\end{center}
+
+A partir disso podemos construir a matriz \(X\).
+\[ X =
+    \begin{bmatrix}
+        1 & 8 & 0 \\
+        1 & 5 & 0 \\
+        1 & 15 & 1 \\
+        1 & 8 & 1 \\
+        1 & 20 & 0
+    \end{bmatrix}
+\]
+Também podemos construir a matriz \(Y\).
+\[ Y =
+    \begin{bmatrix}
+        20 \\
+        40 \\
+        5 \\
+        25 \\
+        2
+    \end{bmatrix}
+\]
+
+Para proceder ao cálculo de \((X'X)^{-1}\) primeiro precisamos escrever \(X'\).
+
+\[
+    X' =
+    \begin{bmatrix}
+        1 & 1 & 1 & 1 & 1 \\
+        8 & 5 & 15 & 8 & 20 \\
+        0 & 0 & 1 & 1 & 0
+    \end{bmatrix}
+\]
+Logo, multiplicando \(X'\) por \(X\), obtemos:
+
+\[
+    X'X =
+    \begin{bmatrix}
+        5 & 56 & 2 \\
+        56 & 778 & 23 \\
+        2 & 23 & 2
+    \end{bmatrix}
+\]
+
+Invertendo a matriz \(X'X\) (aqui também podemos utilizar as frações obtidas) obtemos:
+
+\[
+    (X'X)^{-1} =
+    \begin{bmatrix}
+        1,13732 & -0,07390 & -0,29679 \\
+        -0,07390 & 0,00664 & -0,00332 \\
+        -0,29679 & -0,00332 & 0,83499
+    \end{bmatrix}
+\]
+
+Multiplicamos agora a matriz \(X'\) pela matriz \(Y\):
+\[
+    X'Y =
+    \begin{bmatrix}
+        92 \\
+        675 \\
+        30
+    \end{bmatrix}
+\]
+ Por fim obtemos o produto de \((X'X)^{-1}\) por \(X'Y\):
+ \[
+    (X'X)^{-1}X'Y = \beta =
+    \begin{bmatrix}
+        46,39424 \\
+        -2,33887 \\
+        -4,49723
+    \end{bmatrix} =
+    \begin{bmatrix}
+        \beta_{0} \\
+        \beta_{1} \\
+        \beta_{2}
+    \end{bmatrix}
+ \]
+
+Após calculados os valores de \(\beta\) podemos interpretar que: para empresas do setor de \textit{serviços} e que não possuem nenhum processo, o valor do ativo é, em média, de R\$ 46,39424 \((\beta_{0})\) milhões de reais. Quando o número de processos aumenta em 1 unidade, o valor do ativo diminui, em média, em R\$ 2,33887 \((\beta_{1})\) milhões de reais. As empresas do setor de \textit{comércio} têm, em média, um ativo R\$ 4,49723 \((\beta_{2})\) milhões de reais menor que os das empresas do setor de \textit{serviços}.
+
+Para saber se existem evidências de que a hipótese de exogeneidade foi violada no modelo da letra a), podemos calcular o nosso intervalo da seguinte forma:
+\[ [\beta^{*}_{1}-\beta^{*}_{1} \times 25\%;\beta^{*}_{1}+\beta^{*}_{1} \times 25\%]\]
+\[\beta^{*}_{1} \times 25\% = -2,33887 \times \frac{25}{100} = -0,58472\]
+\[[-2,33887 - 0,58472;-2,33887 + 0,58472]\]
+\[[-2,92359;-1,75415]\]
+
+O \(\beta_{1}\) da regressão simples é igual a \(-2,35676\) e está, portanto, dentro do intervalo definido. Logo, concluímos que \textbf{não há} evidências de que \(H_{1}\) foi violada.
+
+\section*{letra c}
+Para obtermos \(R^{2}\) usaremos \(R^{2} = 1 - \frac{SQR}{SQT}\)
+
+Sabendo que:
+\[\bar{Y} = \frac{92}{5} = 18,4 \]
+\[\beta_{0} = 46,39424 \]
+\[\beta_{1} = -2,33887 \]
+\[\beta_{2} = -4,49723 \]
+
+Primeiro calcularemos \(SQR\)
+\[SQR = \sum (Y - \widehat{Y})^{2}\]
+\[ [ 20 - (\beta_{0} + \beta_{1} \times 8 + \beta_{2} \times 0)]^{2} =  59,03279 \]
+\[ [ 40 - (\beta_{0} + \beta_{1} \times 5 + \beta_{2} \times 0)]^{2} =  28,09117 \]
+\[ [ 5 - (\beta_{0} + \beta_{1} \times 15 + \beta_{2} \times 1)]^{2} =  3,29045 \]
+\[ [ 25 - (\beta_{0} + \beta_{1} \times 8 + \beta_{2} \times 1)]^{2} =  3,29041 \]
+\[ [ 2 - (\beta_{0} + \beta_{1} \times 20 + \beta_{2} \times 0)]^{2} =  5,67945 \]
+\[ SQR = 99,38427\]
+
+Agora calcularemos \(SQT\)
+\[SQT = \sum (Y-\bar{Y})^{2}\]
+\[ ( 20 - 18,4)^{2} = 2,56 \]
+\[ ( 40 - 18,4)^{2} = 466,56 \]
+\[ ( 5 - 18,4)^{2} = 179,56 \]
+\[ ( 25 - 18,4)^{2} = 43,56 \]
+\[ ( 2 - 18,4)^{2} = 268,96 \]
+\[ SQT = 961,2\]
+
+Logo,
+\[ R^{2} = 1 - \frac{99,38427}{961,2} = 0,89660\]
+
+Isso nos diz que 89,66\% da variabilidade de \(Y\) é explicada pelos seus regressores. Ou seja, quão boa a nossa reta de regressão se ajusta aos dados.
+
+Além disso, não é possível que \(R^{2}\) da regressão simples seja maior que o \(R^{2}\) da regressão múltipla, pois \(R^{2}\) é uma função função que sempre cresce com a inclussão de novos regressores. Portanto, o \(R^{2}\) de uma regressão múltipla \textbf{sempre} será maior que o \(R^{2}\) de uma regressão simples. Caso queiramos comparar o poder avaliativo de dois modelos com um número distinto de regressores, precisaríamos utilizar o \(R^{2}\) ajustado.
+
+\section*{letra d}
+As variáveis setor e capital aberto são variáveis qualitativas nominais, porém podem ser expressas como variáveis binárias. Para tanto podemos escrever que \textit{serviço} \(= 0\), \textit{comércio} \(= 1\), \textit{sim} \(= 0\) e \textit{não} \(= 1\). Com isso temos a seguinte tabela:
+\begin{center}
+    \begin{tabular}{|c|c|c|}
+        \hline
+         Ativo & Setor & Cap. Abe. \\ \hline
+         20 & 0 & 0 \\ \hline
+         40 & 0 & 1 \\ \hline
+         5 & 1 & 0 \\ \hline
+         25 & 1 & 1 \\ \hline
+         2 & 0 & 0 \\ \hline
+    \end{tabular}
+\end{center}
+
+Para que seja possível utilizar o MQO precisamos atender \(H_{1}-H_{2}\). Se considerarmos que os fatores não observáveis não estão correlacionados com as variáveis explicativas, \(H_{1}\) estará atendida. Para tanto, basta que o modelo inclua uma constante \((\beta_{0})\) e esta hipótese estará atendida.
+
+Para verificar \(H_{2}\) precisamos mostrar que \(det(X'X) \neq 0\)
+
+Faremos isso considerando o seguinte:
+\[ X =
+    \begin{bmatrix}
+         1 & 0 & 0 \\
+         1 & 0 & 1 \\
+         1 & 1 & 0 \\
+         1 & 1 & 1 \\
+         1 & 0 & 0 \\
+    \end{bmatrix}
+\]
+\[ X' =
+    \begin{bmatrix}
+         1 & 1 & 1 & 1 & 1 \\
+         0 & 0 & 1 & 1 & 0\\
+         0 & 1 & 0 & 1 & 0\\
+    \end{bmatrix}
+\]
+
+Logo,
+\[ X'X = 
+    \begin{bmatrix}
+        5 & 2 & 2 \\
+        2 & 2 & 1 \\
+        2 & 1 & 2
+    \end{bmatrix}
+\]
+E seu determinante é:
+\[ det(X'X) = 7\]
+
+Portanto é possível estimar esse efeito utilizando as variáveis Setor e Capital Aberto.
+
+\section*{letra e}
+Mostramos que o modelo anterior atende \(H_{1}\) e \(H_{2}\), logo, é possível construir um modelo de regressão \textbf{linear} a partir dos dados. Considerando não haver correlação entre os erros de diferentes observações e que a variância dos erros é constante, o modelo anterior atenderá ao teorema de Gauss-Markov (\(H_{1}-H_{4}\) atendidas).
+
+
