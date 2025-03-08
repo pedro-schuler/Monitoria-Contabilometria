@@ -6,66 +6,84 @@ import statsmodels.api as sm
 loglog = False
 loglin = True
 
+# Arredondamento
+# Define a precisão do arredondamento ao calcular B0 e B1
+precision = 3
+# Define a precisão do arredondamento ao calcular logaritmos
+lnprecision = 3
+
+# nome das variáveis
+VariavelDependente = "Preço da Ação"
+VariavelIndependente = "Gasto dos Pares"
+
 # Cria uma tabela com os dados
 dados_brutos = {
-    "VariavelDependente": [21.0, 23.5, 14.6, 13.1, 20.0, 18.1, 20.2, 18.5],
-    "VariavelIndependente": [35, 28, 60, 71, 44, 45, 58, 44],
+    VariavelDependente: [21.0, 23.5, 14.6, 13.1, 20.0, 18.1, 20.2, 18.5],
+    VariavelIndependente: [35, 28, 60, 71, 44, 45, 58, 44],
 }
 
 if loglog:
-    dados_brutos["VariavelIndependente"] = np.log(dados_brutos["VariavelIndependente"])
-    dados_brutos["VariavelDependente"] = np.log(dados_brutos["VariavelDependente"])
+    dados_brutos[VariavelIndependente] = np.round(
+        np.log(dados_brutos[VariavelIndependente]), lnprecision
+    )
+    dados_brutos[VariavelDependente] = np.round(
+        np.log(dados_brutos[VariavelDependente]), lnprecision
+    )
 
 if loglin:
-    dados_brutos["VariavelDependente"] = np.log(dados_brutos["VariavelDependente"])
+    dados_brutos[VariavelDependente] = np.round(
+        np.log(dados_brutos[VariavelDependente]), lnprecision
+    )
+
+# Cria um DataFrame com os dados
+dadosDataFrame = pd.DataFrame(data=dados_brutos)
+multiplyXY = dadosDataFrame[VariavelDependente].multiply(
+    dadosDataFrame[VariavelIndependente]
+)
+xSquared = dadosDataFrame[VariavelIndependente].pow(2)
+dadosDataFrame["X*Y"] = multiplyXY
+dadosDataFrame["X^2"] = xSquared
+
+# Adiciona uma linha com a soma de todas as colunas numéricas
+print(dadosDataFrame)
+print("-------------\n")
+
+# Obtém os somatórios
+somatorios = dadosDataFrame.select_dtypes(np.number).sum()
+print("Somatórios")
+print(somatorios)
+print("-------------\n")
 
 # Obtém o número de elementos
-number_of_elements = len(dados_brutos["VariavelIndependente"])
+number_of_elements = len(dadosDataFrame.index)
 print("Número de elementos =")
 print(number_of_elements)
 print("-------------\n")
 
-# Multiplica os dois elementos para obter X*Y
-XY = np.sum(
-    np.multiply(
-        dados_brutos["VariavelDependente"], dados_brutos["VariavelIndependente"]
-    )
-)
-
-print("X * Y =")
-print(XY)
-print("-------------\n")
-
-# Obtém a soma do quadrado de X
-Xsquared = np.sum(np.square(dados_brutos["VariavelIndependente"]))
-
-print("X^2 =")
-print(Xsquared)
-print("-------------\n")
-
-# Obtém o somatório de X
-Xsum = np.sum(dados_brutos["VariavelIndependente"])
-
-print("Somatório de X =")
-print(Xsum)
-print("-------------\n")
-
-# Obtém o somatório de Y
-Ysum = np.sum(dados_brutos["VariavelDependente"])
-
-print("Somatório de Y =")
-print(Ysum)
-print("-------------\n")
-
 # Calcula B1
-B1 = (number_of_elements * XY - Xsum * Ysum) / (number_of_elements * Xsquared - Xsum**2)
+B1 = np.round(
+    (
+        number_of_elements * dadosDataFrame["X*Y"].sum()
+        - dadosDataFrame[VariavelIndependente].sum()
+        * dadosDataFrame[VariavelDependente].sum()
+    )
+    / (
+        number_of_elements * dadosDataFrame["X^2"].sum()
+        - dadosDataFrame[VariavelIndependente].sum() ** 2
+    ),
+    precision,
+)
 
 print("B1 =")
 print(B1)
 print("-------------\n")
 
 # Calcula B0
-B0 = (Ysum / number_of_elements) - B1 * (Xsum / number_of_elements)
+B0 = np.round(
+    (dadosDataFrame[VariavelDependente].sum() / number_of_elements)
+    - B1 * (dadosDataFrame[VariavelIndependente].sum() / number_of_elements),
+    precision,
+)
 
 print("B0 =")
 print(B0)
@@ -75,8 +93,8 @@ print("-------------\n")
 dados = pd.DataFrame(data=dados_brutos)
 
 # Defina as Variáveis
-x = dados["VariavelIndependente"]
-y = dados["VariavelDependente"]
+x = dados[VariavelIndependente]
+y = dados[VariavelDependente]
 
 # Adicione o termo constante B0
 x = sm.add_constant(x)
