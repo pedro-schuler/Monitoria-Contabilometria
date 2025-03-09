@@ -154,13 +154,17 @@ TC = np.round(
     (B1 - hipoteseNula) / np.sqrt(S2 / dadosDataFrame["somatorioQuadradoX"].sum()),
     precision,
 )
+TCabsolute = np.abs(TC)
 print(f"Tc = {TC}")
+print(f"|Tc| = {TCabsolute}")
 print("-------------\n")
 
 # Calcula o Teste F
 print("Teste F(calculado) =")
 FC = np.round(TC**2, precision)
+FCabsolute = np.abs(FC)
 print(f"Fc = Tc^2 = {FC}")
+print(f"|Fc| = |Tc^2| = {FCabsolute}")
 print("-------------\n")
 
 # Utilizando o statsmodels

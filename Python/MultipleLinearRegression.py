@@ -93,10 +93,10 @@ result = sm.OLS(y, x).fit()
 # Obtém a matriz de variância Covariância
 VarianceCovariance = result.cov_params()
 
-# Sumário de resultados
-print(result.summary())
-
 # Matriz de variância Covariância
-print("-------")
 print("Matriz de variância Covariância")
 print(VarianceCovariance)
+print("-------\n")
+
+# Sumário de resultados
+print(result.summary())
