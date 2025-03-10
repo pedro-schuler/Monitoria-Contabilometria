@@ -182,3 +182,13 @@ result = sm.OLS(y, x).fit()
 
 # Sumário de resultados
 print(result.summary())
+print("-------------\n")
+
+# Realiza o teste T
+print("Teste T(statsmodels) =")
+print(result.t_test([0, 1]))
+print("-------------\n")
+
+## Realiza o teste F
+print("Teste F(statsmodels) =")
+print(result.f_test([0, 1]))
