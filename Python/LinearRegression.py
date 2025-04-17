@@ -107,16 +107,11 @@ class LinearRegressionModel:
         # Always print but adjust detail level based on verbosity
         if self.verbose:
             print(message)
-        elif message and not message.startswith(
-            "---"
-        ):  # Skip separator lines in concise mode
-            # For non-verbose mode, print a condensed version if it's a DataFrame
-            if isinstance(message, pd.DataFrame):
-                print(f"Dados: {message.shape[0]} linhas x {message.shape[1]} colunas")
-            else:
-                # Remove unnecessary details in concise mode
-                concise_msg = message.split("\n")[0] if "\n" in message else message
-                print(concise_msg)
+        elif isinstance(message, pd.DataFrame):
+            print(f"Dados: {message.shape[0]} linhas x {message.shape[1]} colunas")
+        elif not message.startswith("---"):
+            concise_msg = message.split("\n")[0] if "\n" in message else message
+            print(concise_msg)
 
         if separator:
             if self.verbose:
