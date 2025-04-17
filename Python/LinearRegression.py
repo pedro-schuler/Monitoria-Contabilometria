@@ -116,7 +116,7 @@ class LinearRegressionModel:
         if self.loglog:
             print(f"ln(Y) = {self.B0} + {self.B1} * ln(X)")
         elif self.loglin:
-            print(f"Y = {self.B0} + {self.B1} * ln(X)")
+            print(f"ln(Y) = {self.B0} + {self.B1} * X")
         else:
             print(f"Y = {self.B0} + {self.B1} * X")
         print("-------------\n")
@@ -207,7 +207,7 @@ class LinearRegressionModel:
         print("-------------\n")
 
 
-# Example usage
+# Exemplo de uso
 data = {
     "Preço da Ação": [21.0, 23.5, 14.6, 13.1, 20.0, 18.1, 20.2, 18.5],
     "Gasto dos Pares": [35, 28, 60, 71, 44, 45, 58, 44],
