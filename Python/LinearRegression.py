@@ -279,9 +279,13 @@ class LinearRegressionModel:
         else:
             self.R2 = np.round(1 - SQR / SQT, self.precision)
 
+        degrees_of_freedom = self.number_of_elements - 2
+        S2 = np.round(SQR / (degrees_of_freedom), self.precision)
+
         self._print(f"\nSQR = {SQR}")
         self._print(f"SQT = {SQT}")
-        self._print(f"R² = {self.R2}", separator=True)
+        self._print(f"R² = {self.R2}")
+        self._print(f"S² = {S2}", separator=True)
         return self
 
     def hypothesis_tests(self):
