@@ -1,0 +1,10 @@
+name = "Julia"
+uuid = "82b2b260-42a5-4990-80cd-63e18af088dd"
+authors = ["Pedro Schuler <schuler.p.m@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+StatsKit = "2cb19f9e-ec4d-5c53-8573-a4542a68d3f0"
+
+[compat]
+StatsKit = "0.3.1"

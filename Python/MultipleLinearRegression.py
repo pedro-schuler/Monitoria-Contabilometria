@@ -1,3 +1,5 @@
+from fractions import Fraction
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -221,8 +223,18 @@ class LinearRegressionModel:
         elif operation_type == "inverse":
             try:
                 result = np.linalg.inv(matrix_a)
+
+                # Display the inverse matrix in fraction form
+                frac_matrix = np.array(
+                    [
+                        [Fraction(float(val)).limit_denominator() for val in row]
+                        for row in result
+                    ]
+                )
+
                 if self.verbose:
-                    print(result)
+                    for row in frac_matrix:
+                        print([str(frac) for frac in row])
                 else:
                     print("[Matriz inversa calculada]")
                     print(f"Formato: {result.shape}")
