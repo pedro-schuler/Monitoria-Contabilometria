@@ -508,16 +508,16 @@ class LinearRegressionModel:
 # Example usage
 if __name__ == "__main__":
     data = {
-        "Preço da Ação": [21.0, 23.5, 14.6, 13.1, 20.0, 18.1, 20.2, 18.5],
-        "Gasto dos Pares": [35, 28, 60, 71, 44, 45, 58, 44],
-        "Habilidade do CFO": [5.0, 6.2, 9.5, 8.0, 7.9, 7.0, 8.5, 6.8],
+        "Y": [42, 33, 75, 28, 91, 55],
+        "X1": [7, 4, 16, 3, 21, 8],
+        "X2": [33, 41, 7, 49, 5, 31],
     }
     model_verbose = LinearRegressionModel(
         data,
-        "Preço da Ação",
-        "Gasto dos Pares",
-        "Habilidade do CFO",
-        loglin=True,
+        "Y",
+        "X1",
+        "X2",
+        loglin=False,
         verbose=True,
     )
     model_verbose.run_analysis()
