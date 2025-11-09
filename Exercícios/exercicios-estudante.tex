@@ -1,0 +1,360 @@
+
+% ---------------- Student Version: Exercises 1–16 ----------------
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{booktabs}
+\geometry{a4paper, margin=1in}
+\usepackage{amsmath}
+
+\begin{document}
+
+\title{Econometrics Exercises (Student Version)}
+\author{}
+\date{}
+\maketitle
+
+\section*{Simple Linear Regression Exercises}
+
+% ---------------- Exercise 1 ----------------
+\newpage
+\subsection*{Exercise 1 -- Weight and Height}
+\textbf{Data (classroom context):} Weight (kg) $x$, Height (cm) $y$. 5 observations.
+
+\begin{center}
+	\begin{tabular}{ccc}
+		\toprule
+		Obs & Weight ($x$) & Height ($y$) \\
+		\midrule
+		1   & 50           & 160          \\
+		2   & 60           & 165          \\
+		3   & 70           & 170          \\
+		4   & 80           & 175          \\
+		5   & 90           & 180          \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients $\hat\beta_0$ and $\hat\beta_1$ and interpret them.
+
+% ---------------- Exercise 2 ----------------
+\newpage
+\subsection*{Exercise 2 -- Study Hours and Exam Score}
+\textbf{Data:} Study Hours $x$, Exam Score $y$. 6 observations.
+
+\begin{center}
+	\begin{tabular}{ccc}
+		\toprule
+		Obs & Study Hours ($x$) & Exam Score ($y$) \\
+		\midrule
+		1   & 1                 & 65               \\
+		2   & 2                 & 70               \\
+		3   & 3                 & 75               \\
+		4   & 4                 & 80               \\
+		5   & 5                 & 85               \\
+		6   & 6                 & 90               \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret.
+
+% ---------------- Exercise 3 ----------------
+\newpage
+\subsection*{Exercise 3 -- Advertising and Sales}
+\textbf{Data:} Advertising ($x$) in \$1000, Sales ($y$) in units. 6 observations.
+
+\begin{center}
+	\begin{tabular}{ccc}
+		\toprule
+		Obs & Advertising ($x$) & Sales ($y$) \\
+		\midrule
+		1   & 1                 & 50          \\
+		2   & 2                 & 60          \\
+		3   & 3                 & 70          \\
+		4   & 4                 & 80          \\
+		5   & 5                 & 90          \\
+		6   & 6                 & 100         \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret.
+
+% ---------------- Exercise 4 ----------------
+\newpage
+\subsection*{Exercise 4 -- Price and Quantity Demanded}
+\textbf{Data:} Price ($x$), Quantity Demanded ($y$). 6 observations.
+
+\begin{center}
+	\begin{tabular}{ccc}
+		\toprule
+		Obs & Price ($x$) & Quantity ($y$) \\
+		\midrule
+		1   & 1           & 100            \\
+		2   & 2           & 90             \\
+		3   & 3           & 80             \\
+		4   & 4           & 70             \\
+		5   & 5           & 60             \\
+		6   & 6           & 50             \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret.
+
+% ---------------- Exercise 5 ----------------
+\newpage
+\subsection*{Exercise 5 -- Age and Medical Expenses}
+\textbf{Data:} Age ($x$), Annual Medical Expenses ($y$). 4 observations.
+
+\begin{center}
+	\begin{tabular}{ccc}
+		\toprule
+		Obs & Age ($x$) & Medical Expenses ($y$) \\
+		\midrule
+		1   & 30        & 200                    \\
+		2   & 40        & 300                    \\
+		3   & 50        & 400                    \\
+		4   & 60        & 500                    \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret.
+
+% ---------------- Exercise 6 ----------------
+\newpage
+\subsection*{Exercise 6 -- Hours Worked and Weekly Income}
+\textbf{Data:} Hours Worked ($x$), Weekly Income ($y$). 4 observations.
+
+\begin{center}
+	\begin{tabular}{ccc}
+		\toprule
+		Obs & Hours Worked ($x$) & Weekly Income ($y$) \\
+		\midrule
+		1   & 20                 & 250                 \\
+		2   & 30                 & 300                 \\
+		3   & 40                 & 350                 \\
+		4   & 50                 & 400                 \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret.
+
+% ---------------- Exercise 7 ----------------
+\newpage
+\subsection*{Exercise 7 -- Years of Schooling and Monthly Income}
+\textbf{Data:} Years of Schooling ($x$), Monthly Income ($y$). 4 observations.
+
+\begin{center}
+	\begin{tabular}{ccc}
+		\toprule
+		Obs & Years Schooling ($x$) & Monthly Income ($y$) \\
+		\midrule
+		1   & 8                     & 1200                 \\
+		2   & 10                    & 1500                 \\
+		3   & 12                    & 1800                 \\
+		4   & 14                    & 2100                 \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret.
+
+% ---------------- Exercise 8 ----------------
+\newpage
+\subsection*{Exercise 8 -- Coffee Price and Cups Sold}
+\textbf{Data:} Coffee Price ($x$), Cups Sold ($y$). 4 observations.
+
+\begin{center}
+	\begin{tabular}{ccc}
+		\toprule
+		Obs & Price ($x$) & Cups Sold ($y$) \\
+		\midrule
+		1   & 1           & 90              \\
+		2   & 2           & 80              \\
+		3   & 3           & 70              \\
+		4   & 4           & 60              \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret.
+
+% ---------------- Exercise 9 ----------------
+\newpage
+\subsection*{Exercise 9 -- Daily Study Time and Quiz Score}
+\textbf{Data:} Study Hours ($x$), Quiz Score ($y$). 6 observations.
+
+\begin{center}
+	\begin{tabular}{ccc}
+		\toprule
+		Obs & Study Hours ($x$) & Quiz Score ($y$) \\
+		\midrule
+		1   & 1                 & 70               \\
+		2   & 2                 & 75               \\
+		3   & 3                 & 80               \\
+		4   & 4                 & 85               \\
+		5   & 5                 & 90               \\
+		6   & 6                 & 95               \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret.
+
+% ---------------- Exercise 10 ----------------
+\newpage
+\subsection*{Exercise 10 -- Sleep Hours and Productivity}
+\textbf{Data:} Sleep Hours ($x$), Productivity Score ($y$). 6 observations.
+
+\begin{center}
+	\begin{tabular}{ccc}
+		\toprule
+		Obs & Sleep Hours ($x$) & Productivity Score ($y$) \\
+		\midrule
+		1   & 5                 & 70                       \\
+		2   & 6                 & 75                       \\
+		3   & 7                 & 78                       \\
+		4   & 8                 & 82                       \\
+		5   & 9                 & 85                       \\
+		6   & 10                & 90                       \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret.
+
+% ---------------- Exercise 11 ----------------
+\newpage
+\subsection*{Exercise 11 -- Multiple Regression: Study Hours and Sleep vs. Quiz Score}
+\textbf{Data:} Study Hours ($x_1$), Sleep Hours ($x_2$), Quiz Score ($y$). 5 observations.
+
+\begin{center}
+	\begin{tabular}{cccc}
+		\toprule
+		Obs & $x_1$ & $x_2$ & $y$ \\
+		\midrule
+		1   & 2     & 6     & 70  \\
+		2   & 3     & 7     & 75  \\
+		3   & 4     & 6     & 78  \\
+		4   & 5     & 8     & 85  \\
+		5   & 6     & 7     & 90  \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret each $\beta$.
+
+% ---------------- Exercise 12 ----------------
+\newpage
+\subsection*{Exercise 12 -- Multiple Regression: Experience and Education vs. Wage}
+\textbf{Data:} Experience ($x_1$), Education ($x_2$), Wage ($y$). 5 observations.
+
+\begin{center}
+	\begin{tabular}{cccc}
+		\toprule
+		Obs & $x_1$ & $x_2$ & $y$ \\
+		\midrule
+		1   & 1     & 12    & 15  \\
+		2   & 3     & 14    & 20  \\
+		3   & 5     & 16    & 28  \\
+		4   & 7     & 16    & 30  \\
+		5   & 9     & 18    & 40  \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret each $\beta$.
+
+% ---------------- Exercise 13 ----------------
+\newpage
+\subsection*{Exercise 13 -- Advertising, Price vs. Sales}
+\textbf{Data:} Advertising ($x_1$), Price ($x_2$), Units Sold ($y$). 6 observations.
+
+\begin{center}
+	\begin{tabular}{cccc}
+		\toprule
+		Obs & $x_1$ & $x_2$ & $y$ \\
+		\midrule
+		1   & 1     & 10    & 50  \\
+		2   & 2     & 9     & 60  \\
+		3   & 3     & 8     & 75  \\
+		4   & 4     & 7     & 80  \\
+		5   & 5     & 6     & 95  \\
+		6   & 6     & 5     & 100 \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret each $\beta$.
+
+% ---------------- Exercise 14 ----------------
+\newpage
+\subsection*{Exercise 14 -- Experience, Education, and Age vs. Wage}
+\textbf{Data:} Experience ($x_1$), Education ($x_2$), Age ($x_3$), Wage ($y$). 6 observations.
+
+\begin{center}
+	\begin{tabular}{ccccc}
+		\toprule
+		Obs & $x_1$ & $x_2$ & $x_3$ & $y$ \\
+		\midrule
+		1   & 1     & 12    & 22    & 15  \\
+		2   & 3     & 14    & 25    & 22  \\
+		3   & 5     & 16    & 30    & 28  \\
+		4   & 7     & 16    & 35    & 34  \\
+		5   & 9     & 18    & 40    & 40  \\
+		6   & 10    & 18    & 42    & 45  \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret each $\beta$.
+
+% ---------------- Exercise 15 ----------------
+\newpage
+\subsection*{Exercise 15 -- Temperature, Humidity, Wind vs. Ice Cream Sales}
+\textbf{Data:} Temperature ($x_1$), Humidity ($x_2$), Wind ($x_3$), Ice Cream Sales ($y$). 6 observations.
+
+\begin{center}
+	\begin{tabular}{ccccc}
+		\toprule
+		Obs & $x_1$ & $x_2$ & $x_3$ & $y$ \\
+		\midrule
+		1   & 25    & 60    & 5     & 100 \\
+		2   & 27    & 55    & 6     & 110 \\
+		3   & 30    & 50    & 4     & 120 \\
+		4   & 28    & 52    & 5     & 115 \\
+		5   & 26    & 58    & 6     & 105 \\
+		6   & 29    & 53    & 4     & 118 \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret each $\beta$.
+
+% ---------------- Exercise 16 ----------------
+\newpage
+\subsection*{Exercise 16 -- Marketing, Price, Competition vs. Product Demand}
+\textbf{Data:} Marketing ($x_1$), Price ($x_2$), Competitors ($x_3$), Product Demand ($y$). 6 observations.
+
+\begin{center}
+	\begin{tabular}{ccccc}
+		\toprule
+		Obs & $x_1$ & $x_2$ & $x_3$ & $y$ \\
+		\midrule
+		1   & 1     & 10    & 3     & 50  \\
+		2   & 2     & 9     & 2     & 60  \\
+		3   & 3     & 8     & 2     & 70  \\
+		4   & 4     & 7     & 1     & 85  \\
+		5   & 5     & 6     & 1     & 95  \\
+		6   & 6     & 5     & 1     & 100 \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\textbf{Task:} Compute OLS coefficients and interpret each $\beta$.
+
+\end{document}

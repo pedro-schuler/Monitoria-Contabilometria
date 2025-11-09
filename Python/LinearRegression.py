@@ -23,7 +23,7 @@ class LinearRegressionModel:
         loglog: bool = False,
         loglin: bool = False,
         precision: int = 5,
-        lnprecision: int = 3,
+        lnprecision: int = 1,
         null_hypothesis: float = 0,
         verbose: bool = True,
     ):
@@ -449,8 +449,8 @@ class LinearRegressionModel:
 # Exemplo de uso
 if __name__ == "__main__":
     data = {
-        "Y": [42, 33, 75, 28, 91, 55],
-        "X1": [7, 4, 16, 3, 21, 8],
+        "Y": [45, 42, 43.5, 50, 37],
+        "X1": [1, 1, 1, 0, 0],
     }
     # Exemplo de uso com saída detalhada
     model = LinearRegressionModel(data, "Y", "X1", loglin=False, verbose=True)
