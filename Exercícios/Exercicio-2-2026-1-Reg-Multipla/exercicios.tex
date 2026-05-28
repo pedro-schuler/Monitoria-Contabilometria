@@ -1,0 +1,201 @@
+\documentclass[]{ufpe-exercises}
+\usepackage[most]{tcolorbox}
+
+\curso{Ciências Contábeis}
+\discente{Pedro Malta Schuler Caloête}
+\centro{Centro de Ciências Sociais Aplicadas}
+\departamento{Departamento de Ciências Contábeis e Atuariais}
+\titulo{Regressão Múltipla e Regressão Simples}
+\disciplina{Contabilometria}
+\docente{Giuseppe Trevisan}
+\periodo{2026.1}
+\corcabecalho{red4}
+
+\begin{document}
+
+\cabecalho
+
+\begin{questions}
+	\question Você está interessado em entender como o número de processos judiciais trabalhistas acionados contra a empresa afeta o seu ativo total. Espera-se que um maior número de processos deteriore o ativo da firma. Além disso sabe-se que o setor de atividade da firma é um fator importante para entender o tamanho do seu ativo e também a quantidade de processos. Você conseguiu os dados abaixo:
+
+	\centering{Dados}
+	\begin{table}[ht]
+		\centering
+		\begin{tblr}{lcccr}
+			\hline\hline
+			Empresa & Setor    & Número de processos & Ativo (Milhões R\$) & Empresa de capital aberto \\\hline
+			A       & Serviço  & 8                   & 20                  & Sim                       \\
+			B       & Serviço  & 5                   & 40                  & Não                       \\
+			C       & Comércio & 15                  & 5                   & Sim                       \\
+			D       & Comércio & 8                   & 25                  & Não                       \\
+			E       & Serviço  & 20                  & 2                   & Sim                       \\
+		\end{tblr}
+	\end{table}
+
+	\begin{parts}
+		\part Estime, num modelo de regressão múltipla, o efeito do número de processos sobre o ativo da firma e controle esse efeito pelo setor da empresa. Interprete os coeficientes angulares.
+
+		\begin{solution}
+
+			Num modelo de regressão múltipla sabemos que que podemos calcular os estimadores da seguinte forma:
+			\[\hat{\beta} = (X'X)^{-1}X'Y\]
+			onde \(\hat{\beta}\), \(X'\), \(X\) e \(Y\) são matrizes.
+
+			Também sabemos que a variável dependente (\(Y\)) é o Ativo das firmas, uma das variáveis independentes (\(X_1\)) é o número de processos, e introduziremos a segunda variável independente (\(X_2\)) como sendo o setor das empresas.
+
+			A variável Setor, entretanto, precisa ser transformada numa variável quantitativa, e para isso podemos transformá-la numa variável binária onde
+			\[
+				0 = \textrm{Serviço} \quad 1 = \textrm{Comércio}
+			\]
+
+			No caso em estudo, teremos, então, as seguintes matrizes:
+			\[ Y =
+				\begin{bmatrix}
+					20 \\
+					40 \\
+					5  \\
+					25 \\
+					2  \\
+				\end{bmatrix} \quad
+				X =
+				\begin{bmatrix}
+					1 & 8  & 0 \\
+					1 & 5  & 0 \\
+					1 & 15 & 1 \\
+					1 & 8  & 1 \\
+					1 & 20 & 0 \\
+				\end{bmatrix}
+			\]
+
+			Podemos, então obter a matrix transposta de \(X\), \(X'\)
+
+			\[ X' =
+				\begin{bmatrix}
+					1 & 1 & 1  & 1 & 1  \\
+					8 & 5 & 15 & 8 & 20 \\
+					0 & 0 & 1  & 1 & 0  \\
+				\end{bmatrix}
+			\]
+
+			Podemos agora efetuar as multiplicações de matrizes relevantes:
+
+			\[
+				X'X =
+				\begin{bmatrix}
+					5  & 56  & 2  \\
+					56 & 778 & 23 \\
+					2  & 23  & 2
+				\end{bmatrix} \quad
+				X'Y =
+				\begin{bmatrix}
+					92  \\
+					675 \\
+					30
+				\end{bmatrix}
+			\]
+
+			Precisamos agora inverter a matriz \(X'X\). Os passos detalhados de inversão de matrizes podem ser encontrados a partir da página 27 da apostila do professor. Mas podemos resumir os passos principais dizendo que:
+			\[
+				\textit{det}(X'X) = 7780 + 2576 + 2576 - 3112 - 2645 - 6272 = 903
+			\]
+			\[
+				(X'X)^{-1} = \frac{1}{903}
+				\begin{bmatrix}
+					1027 & -66 & -268 \\
+					-66  & 6   & -3   \\
+					-268 & -3  & 754
+				\end{bmatrix}
+			\]
+
+			\begin{tcolorbox}[colback=red!5!white,colframe=red!75!black,title=Atenção]
+				Tentem fazer a inversão de matrizes sozinhos. É importante para treinar.
+			\end{tcolorbox}
+
+			Sabendo os resultados de \((X'X)^{-1}\) e \(X'Y\) podemos calcular a matriz dos estimadores, logo:
+
+			\[
+				(X'X)^{-1}X'Y =
+				\begin{bmatrix}
+					46,3942 \\
+					-2,3389 \\
+					-4,4972
+				\end{bmatrix} =
+				\begin{bmatrix}
+					\hat{\beta_0} \\
+					\hat{\beta_1} \\
+					\hat{\beta_2} \\
+				\end{bmatrix}
+			\]
+
+			\begin{tcolorbox}[colback=red!5!white,colframe=red!75!black,title=Atenção]
+				Refaçam a questão assumindo agora que Comércio será igual a 0 e Serviço igual a 1. O que aconteceria com os estimadores \(\hat{\beta_0}\), \(\hat{\beta_1}\) e \(\hat{\beta_2}\)?
+			\end{tcolorbox}
+
+			Dessa forma, podemos interpretar os coeficiente angulares \(\hat{\beta_1}\) e \(\hat{\beta_2}\). Onde \(\hat{\beta_1}\) nos informará que, a cada processo adicional, o ativo da empresa será reduzido, em média, em 2,3389 milhões de Reais. Já \(\hat{\beta_2}\) nos diz que as empresa do setor de comércio possuem um Ativo que é, em média, 4,4972 milhões de Reais menor que o das empresas do setor de serviços.
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part Você está interessado agora em saber apenas como o setor das empresas afeta o seu Ativo. Considere um modelo de regressão simples e interprete o parâmetro de interesse.
+		\begin{solution}
+
+			Sabemos que:
+			\[\hat{\beta_1} = \frac{n\sum{XY} - \sum{X}\sum{Y}}{n\sum{X^2} - {\sum{X}}^2}\]
+			Também sabemos que:
+			\[\hat{\beta_0} = \bar{Y} - \hat{\beta_1}\bar{X}\]
+
+			Como estamos interessados no efeito do setor sobre o Ativo da empresa, a variável dependente (Y) é o Ativo e a variável independente (X) é o setor. A variável setor, entretanto, precisa ser transformada numa variável quantitativa, e para isso podemos transformá-la numa variável binária onde
+			\[
+				0 = \textrm{Serviço} \quad 1 = \textrm{Comércio}
+			\]
+
+			Dessa forma podemos construir a seguinte tabela:
+			\vspace{0.3cm}
+			\begin{center}
+				\begin{tblr}{lcccc}
+					\hline\hline
+					         & Y (Ativo) & X (Setor) & \(X \times Y\) & \(X^2\) \\\hline
+					A        & 20        & 0         & 0              & 0       \\
+					B        & 40        & 0         & 0              & 0       \\
+					C        & 5         & 1         & 5              & 1       \\
+					D        & 25        & 1         & 25             & 1       \\
+					E        & 2         & 0         & 0              & 0       \\\hline
+					\(\sum\) & 92        & 2         & 30             & 2
+				\end{tblr}
+			\end{center}
+
+			Logo, podemos calcular \(\hat{\beta_1}\) da seguinte forma:
+			\[\hat{\beta_1} = \frac{5 \times 30 - 2 \times 92}{5 \times 2 - 2^2} = -5,\bar{6}\]
+
+			Se \(\hat{\beta_1} = -5,\bar{6}\), temos que \(\hat{\beta_0}\) é:
+			\[ \hat{\beta_0} = \frac{92}{5} + 5,\bar{6} \times \frac{2}{5} = 20,\bar{6} \]
+
+			Dessa forma, interpretando o parâmetro de interesse (\(\hat{\beta_1}\)) chegamos à conclusão de que o Ativo das empresas do setor de comércio é, em média, 5,667 milhões de Reais inferior ao Ativo das empresas do setor de serviços.
+
+			O coeficiente linear encontrado (\(\hat{\beta_0}\)) nos informa que o Ativo das empresas do setor de serviços é de, em média, 20,667 milhões de Reais.
+
+			Podemos resolver essa questão de modo um tanto mais direto. Como temos uma variável binária, podemos dizer que:
+
+			\[\mathbb{E}(Y_i \mid X_i = 0) = \hat{\beta_0} + \hat{\beta_1} \times 0 \]
+			\[\mathbb{E}(Y_i \mid X_i = 0) = \hat{\beta_0} \]
+			\[\frac{20 + 40 + 2}{3} = \hat{\beta_0} \]
+			\[\hat{\beta_0} = 20,\bar{6}\]
+
+			Agora podemos aplicar o mesmo processo para \(\hat{\beta_1}\):
+
+			\[\mathbb{E}(Y_1 \mid X_i = 1) = \hat{\beta_0} + \hat{\beta_1} \times 1\]
+			\[\mathbb{E}(Y_1 \mid X_i = 1) - \hat{\beta_0} = \hat{\beta_1} \]
+			\[\frac{5 + 25}{2} - 20,\bar{6} = \hat{\beta_1} \]
+			\[\hat{\beta_1} = -5,\bar{6}\]
+
+			A interpretação dos coeficientes permanece a mesma.
+
+			\begin{tcolorbox}[colback=red!5!white,colframe=red!75!black,title=Atenção]
+				Caso assumíssemos comércio sendo igual a 0 e serviço igual a 1, o que aconteceria com os estimadores \(\hat{\beta_0}\) e \(\hat{\beta_1}\)?
+			\end{tcolorbox}
+
+		\end{solution}
+	\end{parts}
+
+\end{questions}
+\end{document}

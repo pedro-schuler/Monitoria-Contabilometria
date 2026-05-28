@@ -1,0 +1,124 @@
+\documentclass[answers]{exam}
+\usepackage{tabularray}
+\usepackage{graphicx}
+\usepackage{luatex85}
+\usepackage{fontspec}
+\usepackage[brazilian]{babel}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb,mathtools}
+
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Courier New}
+
+\renewcommand{\solutiontitle}{\noindent\textbf{Solução:}\enspace}
+
+\begin{document}
+
+\begin{center}
+	\begin{tblr}{width=\textwidth,colspec={X[c]X[c]X[c]},hlines,vlines,}
+		\SetCell[c=2]{m} \rule{0pt}{5em} \Large\textbf{Monitoria de Contabilometria (2026.1)} &  & \SetCell[r=2]{m} \includegraphics[width=50px]{logo-universidade.png} \\
+		\SetCell[c=2]{c} \textbf{Questões}                                                    &  &                                                                      \\
+	\end{tblr}
+\end{center}
+
+\begin{questions}
+	\question A diretoria de vestibular de uma pequena faculdade realizou um recém desenhado teste de admissão com 20 estudantes, selecionados aleatoriamente, da turma de calouros, para determinar se a média das notas dos estudantes ao final do primeiro ano pode ser predita a partir da nota do ENEM. Os resultados foram os seguintes. Assuma que uma regressão simples é apropriada para este caso.
+	\begin{center}
+		\begin{tblr}{colspec={X[c]X[c]},hlines,vlines}
+			\(X_i\) & \(Y_i\) \\
+			5,5     & 3,1     \\
+			4,8     & 2,3     \\
+			4,7     & 3,0     \\
+			3,9     & 1,9     \\
+			4,5     & 2,5     \\
+			6,2     & 3,7     \\
+			6,0     & 3,4     \\
+			5,2     & 2,6     \\
+			4,7     & 2,8     \\
+			4,3     & 1,6     \\
+			4,9     & 2,0     \\
+			5,4     & 2,9     \\
+			5,0     & 2,3     \\
+			6,3     & 3,2     \\
+			4,6     & 1,8     \\
+			4,3     & 1,4     \\
+			5,0     & 2,0     \\
+			5,9     & 3,8     \\
+			4,1     & 2,2     \\
+			4,7     & 1,5     \\
+		\end{tblr}
+	\end{center}
+	\begin{parts}
+		\part Obtenha os estimadores de MQO (\(\beta_0\) e \(\beta_1\)) e a função de regressão.
+		\begin{solution}
+			Sabemos que podemos calcular os estimadores da seguinte forma:
+			\[\beta_1 = \frac{n\sum{XY} - \sum{X}\sum{Y}}{n\sum{x^2} = (\sum{X})^2}\]
+			\[\beta_0 = \bar{Y} - \beta_1 \bar{X} \]
+
+			Dessa forma, calculando os somatórios descritos obtemos que:
+			\[\sum{X} = 100, \sum{Y} = 50, \sum{X^2} = 509,12, \sum{XY} = 2576,66\]
+
+			Inserindo os valores na fórmula acima obtemos que:
+			\[\beta_0 = -1,69955, \beta_1 = 0,83991\]
+		\end{solution}
+		\part Interprete os dois estimadores.
+		\begin{solution}
+			\(\beta_1\) nos informa que, para cada ponto obtido no ENEM, a nota média dos estudantes ao final do primeiro ano letivo aumenta, em média, em 0,83991 pontos. Já \(\beta_0\) nos informa que, quando a nota do ENEM do estudante for igual a \(0\), a nota média do estudante ao final do primeiro letivo será, em média, igual \(-1,69955\).
+		\end{solution}
+		\part A interpretação de \(\beta_0\) é útil neste caso?
+		\begin{solution}
+			Como não existe possibilidade de ingresso na faculdade com nota do ENEM igual a 0, muito menos existe a possibilidade de manter uma média de nota negativa, esse estimador nos é útil apenas para efetuar os cálculos preditivos de notas.
+		\end{solution}
+	\end{parts}
+
+	\question Uma empresa vende uma calculadora de mesa importada, utilizando um modelo de franquias em que a manutenção preventiva e reparos são realizados pela franqueadora. Os dados abaixo foram coletados dos últimos 18 chamados para o serviço de manutenção preventiva. Para cada chamado, \(X\) representa o número de máquinas submetidas à manutenção e \(Y\) é o número total de minutos gastos neste chamado pelo funcionário de manutenção. Assuma que o modelo de regressão simples é apropriado para este caso.
+	\begin{center}
+		\begin{tblr}{colspec={X[c]X[c]},hlines,vlines}
+			\(X_i\) & \(Y_i\) \\
+			7       & 97      \\
+			6       & 86      \\
+			5       & 78      \\
+			1       & 10      \\
+			5       & 75      \\
+			4       & 62      \\
+			7       & 101     \\
+			3       & 39      \\
+			4       & 53      \\
+			2       & 33      \\
+			8       & 118     \\
+			5       & 65      \\
+			2       & 25      \\
+			5       & 71      \\
+			7       & 105     \\
+			1       & 17      \\
+			4       & 49      \\
+			5       & 68      \\
+		\end{tblr}
+	\end{center}
+	\begin{parts}
+		\part Obtenha os estimadores de MQO (\(\beta_0\) e \(\beta_1\)) e a função de regressão.
+		\begin{solution}
+			Sabemos que podemos calcular os estimadores da seguinte forma:
+			\[\beta_1 = \frac{n\sum{XY} - \sum{X}\sum{Y}}{n\sum{x^2} = (\sum{X})^2}\]
+			\[\beta_0 = \bar{Y} - \beta_1 \bar{X} \]
+
+			Dessa forma, calculando os somatórios descritos obtemos que:
+			\[\sum{X} = 81, \sum{Y} = 1152, \sum{X^2} = 439, \sum{XY} = 6282\]
+
+			Inserindo os valores na fórmula acima obtemos que:
+			\[\beta_0 = -2,32217, \beta_1 = 14,73826\]
+		\end{solution}
+		\part Interprete os dois estimadores.
+		\begin{solution}
+			\(\beta_1\) nos informa que, para cada máquina adicional que precise de manutenção, o tempo do serviço aumenta, em média, em \(14,73826\) minutos. Já \(\beta_0\) nos informa que, quando não existem máquinas para realizar a manutenção, o tempo médio gasto em cada chamado é de \(-2,32217\) minutos.
+		\end{solution}
+		\part A interpretação de \(\beta_0\) é útil neste caso?
+		\begin{solution}
+			Como não existiria nenhum chamado caso não houvessem máquinas a serem manutenidas,e, além disso, não existe tempo negativo, esse estimador nos é útil apenas para efetuar os cálculos preditivos de tempo de manutenção.
+		\end{solution}
+	\end{parts}
+
+\end{questions}
+\end{document}

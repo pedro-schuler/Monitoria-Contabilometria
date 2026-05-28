@@ -508,9 +508,9 @@ class LinearRegressionModel:
 # Example usage
 if __name__ == "__main__":
     data = {
-        "Y": [45, 42, 43.5, 50, 37],
-        "X1": [0, 0, 0, 1, 1],
-        "X2": [900, 1000, 800, 900, 1000],
+        "Y": [20, 40, 5, 25, 2],
+        "X1": [8, 5, 15, 8, 20],
+        "X2": [0, 0, 1, 1, 0],
     }
     model_verbose = LinearRegressionModel(
         data,

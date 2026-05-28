@@ -1,0 +1,45 @@
+\documentclass[12pt,a4paper,titlepage=false]{scrartcl}
+
+\usepackage{luatex85}
+\usepackage{fontspec}
+\usepackage[brazilian]{babel}
+\usepackage{microtype}
+\usepackage{indentfirst}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{csquotes}
+\usepackage[automark]{scrlayer-scrpage}
+
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Courier New}
+
+\addtokomafont{disposition}{\boldmath}
+
+\clearpairofpagestyles
+\rohead{\pagemark}
+
+\onehalfspacing
+\recalctypearea
+\AfterCalculatingTypearea{\newgeometry{left=3cm, right=2cm, top=3cm, bottom=2cm}}
+
+\title{\(R^{2}\) e \(\bar{R^{2}}\)}
+\author{Pedro Schuler \thanks{\href{mailto:pedro.schuler@ufpe.br}{pedro.schuler@ufpe.br}}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Definições}
+O \(R^{2}\), conforme aprendemos, quantifica a qualidade do ajuste da reta de regressão aos dados observados, ou seja: quanto da variabilidade do da variável dependente (regressando) é explicada pela variabilidade de seu(s) regressor(es) (variáveis independentes). Essa definição, por mais correta que esteja, pode causar dúvidas e enganos.
+
+Por exemplo, podemos interpretar que um \(R^{2}\) \enquote{baixo} significa um modelo de regressão \enquote{ruim}. Entretanto, nada no modelo clássico de regressão linear diz qual deverá ser o valor aceitável de \(R^{2}\). Cada área do conhecimento adota padrões diferentes para aceitação do valor de \(R^{2}\). Valores muito comuns, no campo das ciências humanas e sociais, são 0,9 e 0,95. Em áreas da física, por exemplo, esse valor pode ser de até 0,999999. Além disso, um \(R^{2}\) \enquote{baixo} pode significar apenas que, embora o modelo esteja correto, o número de observações foi muito baixo. Pode significar também que a nossa variável de interesse contribui muito pouco para os valores do nosso regressando (variável dependente). Portanto, o valor isolado de \(R^{2}\) significa apenas a qualidade do ajuste da reta aos dados que foram coletados e não nos informa totalmente sobre a correção do modelo de regressão linear.
+
+Uma das limitações do \(R^{2}\) é que ele sempre crescerá com a inclusão de novos regressores (caso o regressor incluído seja perfeitamente colinear com outro regressor o \(R^{2}\)) permanecerá igual, nunca diminuirá). Uma das maneiras de lidar com essa limitação do \(R^{2}\) é penalizar a inclusão de regressores que não contribuem significativamente para a regressão. Fazemos isso utilizando o \(\bar{R^{2}}\) (\(R^{2}\) ajustado). Isso não significa dizer que o \(\bar{R^{2}}\) é uma medida de ajuste da reta melhor do que o \(R^{2}\). A utilidade do \(\bar{R^{2}}\) reside no fato dele ser bastante útil para comparação de modelos de regressão com um número distinto de regressores.
+
+\section{Quando usar cada um?}
+Talvez você se pergunte, então, quando usar \(R^{2}\) e \(\bar{R^{2}}\)? Quando estivermos comparando modelos com diferentes números de regressores ou quando desejarmos evitar a inclusão de variáveis desnecessárias (overfitting), será necessário usarmos o \(\bar{R^{2}}\) para levarmos em conta o efeito da inclusão de novos regressores no nosso modelo. Caso desejemos saber apenas a qualidade do ajuste da reta ou desejarmos apenas comparar modelos de regressão simples, ou com o mesmo número de regressores, pode ser mais vantajoso utilizarmos o \(R^{2}\) por sua explicação mais simples e direta.
+\end{document}

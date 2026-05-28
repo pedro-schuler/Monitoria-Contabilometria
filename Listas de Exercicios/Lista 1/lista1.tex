@@ -1,0 +1,732 @@
+\documentclass[]{ufpe-exercises}
+\usepackage{hyperref}
+
+\curso{Ciências Contábeis}
+\discente{Pedro Malta Schuler Caloête}
+\centro{Centro de Ciências Sociais Aplicadas}
+\departamento{Departamento de Ciências Contábeis e Atuariais}
+\titulo{Lista 1 - Exercício 2}
+\disciplina{Contabilometria}
+\docente{Giuseppe Trevisan}
+\periodo{2026.1}
+\corcabecalho{red4}
+
+\begin{document}
+
+\cabecalho
+
+\begin{questions}
+
+	\question Conforme Exercício 2, disponível no site do professor [\url{https://sites.google.com/view/giuseppetrevisan/teaching}]
+
+	\begin{parts}
+
+		\part
+
+		\begin{solution}
+
+			\begin{center}
+				\begin{tabular}{|c|c|c|c|c|}
+					\hline
+					Empresa  & Retorno (Y) & Agressividade (X) & \(X \times Y\) & \(X^2\) \\ \hline
+					A        & 3,0         & 25                & 75             & 625     \\ \hline
+					B        & 3,5         & 28                & 98             & 784     \\ \hline
+					C        & 3,6         & 35                & 126            & 1225    \\ \hline
+					D        & 3,1         & 20                & 62             & 400     \\ \hline
+					E        & 3,3         & 25                & 82,5           & 625     \\ \hline
+					F        & 3,8         & 30                & 114            & 900     \\ \hline
+					G        & 4,0         & 35                & 140            & 1225    \\ \hline
+					H        & 3,1         & 25                & 77,5           & 625     \\ \hline
+					I        & 3,2         & 20                & 64             & 400     \\ \hline
+					J        & 3,5         & 30                & 105            & 900     \\ \hline
+					\(\sum\) & 34,1        & 273               & 944            & 7709    \\ \hline
+				\end{tabular}
+			\end{center}
+
+			\(\hat{\beta_{1}}\) pode ser definido da seguinte forma:
+			\[\hat{\beta_{1}} = \frac{n\sum (X_{i}Y_{i}) - \sum Y_{i}\sum X_{i}}{n\sum X^2 - (\sum X_{i})^2}\]
+			Agora podemos utilizar os valores da tabela criada para calcular \(\hat{\beta_{1}}\).
+			\[ \hat{\beta_{1}} = \frac{10 \times 944 - 273 \times 34,1}{10 \times 7709 - (273)^2} = 0,05103 \]
+			\(\hat{\beta_{0}}\) pode ser definido como \(\hat{\beta_{0}} = \bar{Y} - \beta_{1} \times \bar{X}\), logo:
+			\[ \hat{\beta_{0}} = \frac{34,1}{10} + 0,05103 \times \frac{273}{10} = 2,01688 \]
+
+			Agora que temos os valores de \(\hat{\beta_{0}}\) e \(\hat{\beta_{1}}\) podemos interpretar o seguinte: quando a agressividade tributária for igual a 0, o retorno sobre o investimento das empresas será, em média, igual a 2,01688 mil reais. O \(\hat{\beta_{1}}\) nos informa que, quando a agressividade tributária aumenta em mil reais, o retorno sobre o investimento aumenta, em média, em 0,05103 mil reais, ou seja, aumenta em R\$ 51,03.
+
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+
+			A variância do erro, denotada por \(\sigma^{2}\), é um parâmetro populacional e, portanto, desconhecido. Para estimá-lo podemos utilizar os seguintes estimadores:
+			\[
+				S^{2} = \frac{\sum \hat{u_i^2}}{n-k} \quad
+				\hat{\sigma^2}= \frac{\sum \hat{u_i^2}}{n}
+			\]
+
+			Inicialmente precisamos calcular o somatório do quadrado dos resíduos (SQR).
+			\[SQR = \sum (Y - \widehat{Y})^{2}\]
+			\[ [ 3,0 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25)]^{2} =  0,08563 \]
+			\[ [ 3,5 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 28)]^{2} =  0,00295 \]
+			\[ [ 3,6 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 35)]^{2} =  0,04118 \]
+			\[ [ 3,1 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 20)]^{2} =  0,00391 \]
+			\[ [ 3,3 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25)]^{2} =  0,00005 \]
+			\[ [ 3,8 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 30)]^{2} =  0,06361 \]
+			\[ [ 4,0 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 35)]^{2} =  0,03884 \]
+			\[ [ 3,1 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25)]^{2} =  0,03711 \]
+			\[ [ 3,2 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 20)]^{2} =  0,02641 \]
+			\[ [ 3,5 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 30)]^{2} =  0,00228 \]
+			\[ SQR = 0,30197\]
+
+			Portanto:
+			\[
+				S^{2} = \frac{0,30197}{10-2} = \frac{0,30197}{8} = 0,03775 \quad
+				\hat{\sigma^2}= \frac{0,30197}{10} = 0,03020
+			\]
+
+			Entretanto, vamos preferir utilizar \(S^{2}\) como estimador da variância do erro, pois ele é um estimador não viesado.
+
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+
+			Para calcularmos a variância e covariância das variáveis em questão podemos utilizar uma abordagem matricial. A matriz de variância-covariância dos estimadores é dada por:
+			\[VarCov = S^2 \times (X'X)^{-1}\]
+			Como já obtivemos \(S^2\) na questão anterior, precisamos apenas calcular \((X'X)^{-1}\).
+
+			\[(X'X) = \begin{bmatrix}
+					n      & \sum X     \\
+					\sum X & \sum X^{2}
+				\end{bmatrix}
+			\]
+
+			E, portanto:
+			\[(X'X)^{-1} = \frac{1}{n\sum X^{2} - (\sum X)^{2}} \times \begin{bmatrix}
+					\sum X^{2} & -\sum X \\
+					-\sum X    & n
+				\end{bmatrix}
+			\]
+
+			Logo, temos que:
+			\[
+				VarCov = S^2 \times (X'X)^{-1} = 0,03775 \times \frac{1}{10 \times 7709 - (273)^{2}} \times
+				\begin{bmatrix}
+					7709 & -273 \\
+					-273 & 10
+				\end{bmatrix}
+			\]
+			\[
+				VarCov =
+				\begin{bmatrix}
+					0,11363  & -0,00402 \\
+					-0,00402 & 0,00015
+				\end{bmatrix}
+			\]
+
+			Por fim, temos que:
+			\[Var(\hat{\beta_{0}}) = 0,11363\]
+			\[Var(\hat{\beta_{1}}) = 0,00015\]
+
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+
+			A hipótese que garante o não-viés dos estimadores é a hipótese de exogeneidade (H1), que diz que \(E(u|X) = 0\).
+
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+
+			A variância de \(Var(\hat{\beta_{0}} + \hat{\beta_{1}})\) é dada por:
+
+			\[Var(\hat{\beta_{0}} + \hat{\beta_{1}}) = Var(\hat{\beta_{0}}) + Var(\hat{\beta_{1}}) + 2 \times Cov(\hat{\beta_{0}} \hat{\beta_{1}})\]
+			Da letra C temos que:
+			\[Var(\hat{\beta_{0}} + \hat{\beta_{1}}) = 0,11363 + 0,00015 + 2 \times (-0,00402)\]
+			\[Var(\hat{\beta_{0}} + \hat{\beta_{1}}) = 0,10574\]
+
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+
+			Sabemos que \(R^{2}\) é dado por:
+			\[ R^{2} = 1 - \frac{SQR}{SQT} \]
+
+			E da letra b temos que \(SQR = 0,30197\). Agora precisamos calcular \(SQT\).
+
+			\[SQT = \sum (Y-\bar{Y})^{2}\]
+			\[ (3,0 - 3,41)^{2} =  0,1681 \]
+			\[ (3,5 - 3,41)^{2} =  0,0081 \]
+			\[ (3,6 - 3,41)^{2} =  0,0361 \]
+			\[ (3,1 - 3,41)^{2} =  0,0961 \]
+			\[ (3,3 - 3,41)^{2} =  0,0121 \]
+			\[ (3,8 - 3,41)^{2} =  0,1521 \]
+			\[ (4,0 - 3,41)^{2} =  0,3481 \]
+			\[ (3,1 - 3,41)^{2} =  0,0961 \]
+			\[ (3,2 - 3,41)^{2} =  0,0441 \]
+			\[ (3,5 - 3,41)^{2} =  0,0081 \]
+			\[SQT = 0,9690\]
+
+			Portanto: \text{\large\( R^{2} = 1 - \frac{0,30197}{0,9690} = 0,68837\)}
+
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+
+			O modelo calculado foi:
+			\[ retorno_{i} = 2,01688 + 0,05103 \times BTD_{i} + u_{i} \]
+
+			Substituindo o valor apropriado de BTD, temos:
+			\[ retorno_{i} = 2,01688 + 0,05103 \times 29 = 3,49675 \]
+
+		\end{solution}
+	\end{parts}
+
+	\question Conforme Exercício 2
+
+	\begin{parts}
+
+		\part
+
+		\begin{solution}
+
+			\begin{center}
+				\begin{tabular}{|c|c|}
+					\hline
+					Preço (Y) & Receita Líquida (X) \\ \hline
+					10        & 25                  \\ \hline
+					15        & 30                  \\ \hline
+					30        & 35                  \\ \hline
+					16        & 28                  \\ \hline
+					20        & 25                  \\ \hline
+					12        & 25                  \\ \hline
+				\end{tabular}
+			\end{center}
+
+			Utilizaremos uma abordagem matricial para derivar os estimadores de MQO. As matrizes \(X\) e \(Y\) são dadas por:
+			\[ X =
+				\begin{bmatrix}
+					1 & 25 \\
+					1 & 30 \\
+					1 & 35 \\
+					1 & 28 \\
+					1 & 25 \\
+					1 & 25
+				\end{bmatrix} \quad
+				Y =
+				\begin{bmatrix}
+					10 \\
+					15 \\
+					30 \\
+					16 \\
+					20 \\
+					12
+				\end{bmatrix}
+			\]
+
+			Também podemos escrever a matriz \(X'\) da seguinte forma:
+			\[
+				X' =
+				\begin{bmatrix}
+					1  & 1  & 1  & 1  & 1  & 1  \\
+					25 & 30 & 35 & 28 & 25 & 25
+				\end{bmatrix}
+			\]
+
+			Logo, multiplicando \(X'\) por \(X\), obtemos:
+			\[
+				X'X =
+				\begin{bmatrix}
+					6   & 168  \\
+					168 & 4784
+				\end{bmatrix}
+			\]
+
+			Invertendo a matriz \(X'X\) obtemos:
+			\[
+				(X'X)^{-1} =
+				\frac{1}{6 \times 4784 - 168^2} \times \begin{bmatrix}
+					4784 & -168 \\
+					-168 & 6
+				\end{bmatrix}
+			\]
+
+			Podemos também obter a matriz \(X'Y\), que é dada por:
+			\[
+				X'Y =
+				\begin{bmatrix}
+					103 \\
+					2998
+				\end{bmatrix}
+			\]
+
+			Por fim, obtemos o produto de \((X'X)^{-1}\) por \(X'Y\):
+			\[
+				(X'X)^{-1}X'Y = \hat{\beta} =
+				\frac{1}{6 \times 4784 - 168^2} \times \begin{bmatrix}
+					-10912 \\
+					684
+				\end{bmatrix} =
+				\begin{bmatrix}
+					-22,73333 \\
+					1,425
+				\end{bmatrix} =
+				\begin{bmatrix}
+					\hat{\beta_{0}} \\
+					\hat{\beta_{1}}
+				\end{bmatrix}
+			\]
+
+			Logo, podemos interpretar que, quando a receita líquida é igual a 0, o preço do ativo é, em média, de R\$ -22,73333. Além disso, quando a receita líquida aumenta em (1) mil reais, o preço do ativo aumenta, em média, em R\$ 1,425.
+
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+
+			A variância dos estimadores pode ser calculada utilizando a seguinte fórmula:
+			\[VarCov = S^2 \times (X'X)^{-1}\]
+
+			Primeiramente precisamos calcular \(S^2\). Para isso, precisamos calcular o somatório do quadrado dos resíduos (SQR).
+			\[SQR = \sum (Y - \widehat{Y})^{2}\]
+			\[ [ 10 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25)]^{2} =  8,36176 \]
+			\[ [ 15 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 30)]^{2} =  25,16698 \]
+			\[ [ 30 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 35)]^{2} =  8,17005 \]
+			\[ [ 16 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 28)]^{2} =  1,36112 \]
+			\[ [ 20 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25)]^{2} =  50,52836 \]
+			\[ [ 12 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25)]^{2} =  0,79508 \]
+			\[ SQR = 94,38335\]
+
+			Logo, sabendo que \text{\large\(S^2 = \frac{SQR}{n-k}\)}:
+			\[S^{2} = \frac{94,38335}{6-2} = 23,59584\]
+
+			Agora podemos calcular a matriz \(VarCov\):
+			\[VarCov = 23,59584 \times (X'X)^{-1}\]
+			\[
+				VarCov =  \frac{23,59584}{6 \times 4784 - 168^2} \times
+				\begin{bmatrix}
+					4784 & -168 \\
+					-168 & 6
+				\end{bmatrix}
+			\]
+			\[
+				VarCov =
+				\begin{bmatrix}
+					235,17187 & -8,25854 \\
+					-8,25854  & 0,29495
+				\end{bmatrix}
+			\]
+
+			Portanto, temos:
+			\[Var(\hat{\beta_{0}}) = 235,17187\]
+			\[Var(\hat{\beta_{1}}) = 0,29495\]
+
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+
+			\begin{center}
+				\begin{tabular}{|c|c|c|}
+					\hline
+					Preço (Y) & Receita Líquida (\(X_{1}\)) & Escolaridade (\(X_{2}\)) \\ \hline
+					10        & 25                          & 22                       \\ \hline
+					15        & 30                          & 20                       \\ \hline
+					30        & 35                          & 24                       \\ \hline
+					16        & 28                          & 16                       \\ \hline
+					20        & 25                          & 18                       \\ \hline
+					12        & 25                          & 24                       \\ \hline
+				\end{tabular}
+			\end{center}
+
+			Por se tratar de uma regressão múltipla, precisaremos novamente adotar uma abordagem matricial. As matrizes relevantes são:
+			\[
+				X =
+				\begin{bmatrix}
+					1 & 25 & 22 \\
+					1 & 30 & 20 \\
+					1 & 35 & 24 \\
+					1 & 28 & 16 \\
+					1 & 25 & 18 \\
+					1 & 25 & 24
+				\end{bmatrix} \quad
+				Y =
+				\begin{bmatrix}
+					10 \\
+					15 \\
+					30 \\
+					16 \\
+					20 \\
+					12
+				\end{bmatrix} \quad
+				X' =
+				\begin{bmatrix}
+					1  & 1  & 1  & 1  & 1  & 1  \\
+					25 & 30 & 35 & 28 & 25 & 25 \\
+					22 & 20 & 24 & 16 & 18 & 24
+				\end{bmatrix}
+			\]
+
+			Primeiramente obtemos \(X'X\):
+			\[
+				X'X =
+				\begin{bmatrix}
+					6   & 168  & 124  \\
+					168 & 4784 & 3488 \\
+					124 & 3488 & 2616
+				\end{bmatrix}
+			\]
+
+			Em seguida obtemos também o determinante da matriz \(X'X\), que é igual a:
+			\[det(X'X) = 24064\]
+
+			Precisamos agora obter a matriz adjunta, que é simplesmente a transposta da matriz dos cofatores. Vamos agora calcular cada um dos cofatores.
+
+			\[ C_{11} = -1^{2} \times det
+				\begin{bmatrix}
+					4784 & 3488 \\
+					3488 & 2616
+				\end{bmatrix}
+				= 348800
+				\qquad
+				C_{12} = -1^{3} \times det
+				\begin{bmatrix}
+					168 & 3488 \\
+					124 & 2616
+				\end{bmatrix}
+				= -6976
+			\]
+
+			\[ C_{13} = -1^{4} \times det
+				\begin{bmatrix}
+					168 & 4784 \\
+					124 & 3488
+				\end{bmatrix}
+				= -7232
+				\qquad
+				C_{22} = -1^{4} \times det
+				\begin{bmatrix}
+					6   & 124  \\
+					124 & 2616
+				\end{bmatrix}
+				= 320
+			\]
+
+			\[ C_{23} = -1^{5} \times det
+				\begin{bmatrix}
+					6   & 168  \\
+					124 & 3488
+				\end{bmatrix}
+				= -96
+				\qquad
+				C_{33} = -1^{6} \times det
+				\begin{bmatrix}
+					6   & 168  \\
+					168 & 4784
+				\end{bmatrix}
+				= 480
+			\]
+
+			Assim obtemos a matriz  dos cofatores:
+
+			\[ Cof(X'X) =
+				\begin{bmatrix}
+					348800 & -6976 & -7232 \\
+					-6976  & 320   & -96   \\
+					-7232  & -96   & 480
+				\end{bmatrix}
+			\]
+
+			Dessa forma podemos obter a matriz inversa de \(X'X\) da seguinte forma:
+			\[(X'X)^{-1} = \frac{1}{det(X'X)} \times Adj(X'X)
+			\]
+
+			Onde \(Adj(X'X)\) é a matriz transposta da matriz dos cofatores. Como a matriz dos cofatores é simétrica, a matriz adjunta é igual a matriz dos cofatores.
+
+			Ou seja:
+			\[(X'X)^{-1} =
+				\frac{1}{24064} \times
+				\begin{bmatrix}
+					348800 & -6976 & -7232 \\
+					-6976  & 320   & -96   \\
+					-7232  & -96   & 480
+				\end{bmatrix}
+			\]
+
+			Obtemos agora a matriz \(X'Y\):
+			\[
+				X'Y =
+				\begin{bmatrix}
+					103  \\
+					2998 \\
+					2144
+				\end{bmatrix}
+			\]
+
+			Podemos então calcular os coeficientes \(\hat{\beta}\):
+			\[(X'X)^{-1}X'Y = \hat{\beta} =
+				\frac{1}{24064} \times
+				\begin{bmatrix}
+					348800 & -6976 & -7232 \\
+					-6976  & 320   & -96   \\
+					-7232  & -96   & 480
+				\end{bmatrix} \times
+				\begin{bmatrix}
+					103  \\
+					2998 \\
+					2144
+				\end{bmatrix}
+			\]
+			\[(X'X)^{-1}X'Y = \hat{\beta} =
+				\frac{1}{24064} \times
+				\begin{bmatrix}
+					-493056 \\
+					35008   \\
+					-3584
+				\end{bmatrix} =
+				\begin{bmatrix}
+					-20,48936 \\
+					1,45479   \\
+					-0,14894
+				\end{bmatrix} =
+				\begin{bmatrix}
+					\hat{\beta_{0}} \\
+					\hat{\beta_{1}} \\
+					\hat{\beta_{2}}
+				\end{bmatrix}
+			\]
+
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+
+			A literatura sugere uma relação positiva entre a escolaridade e o preço do ativo, ou seja, espera-se que \(\hat{\beta_{2}} > 0\). Entretanto, o valor obtido para \(\hat{\beta_{2}}\) foi \(-0,14894\), indicando uma relação negativa entre as variáveis. Existem evidências de que a hipótese de exogeneidade foi violada, uma vez que \(\hat{\beta}^{simples}_{1} \neq \hat{\beta}^{multipla}_{1}\).
+
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+
+			Para calcularmos a variância dos estimadores, precisamos novamente calcular \(S^2\). Para isso, precisamos calcular o somatório do quadrado dos resíduos (SQR).
+			\[SQR = \sum (Y - \widehat{Y})^{2}\]
+			\[ [ 10 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25 + \hat{\beta_{2}} \times 22)]^{2} =  6,77930 \]
+			\[ [ 15 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 30 + \hat{\beta_{2}} \times 20)]^{2} =  26,78621 \]
+			\[ [ 30 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 35 + \hat{\beta_{2}} \times 24)]^{2} =  9,89901 \]
+			\[ [ 16 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 28 + \hat{\beta_{2}} \times 16)]^{2} =  3,46600 \]
+			\[ [ 20 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25 + \hat{\beta_{2}} \times 18)]^{2} =  46,24721 \]
+			\[ [ 12 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25 + \hat{\beta_{2}} \times 24)]^{2} =  0,09353 \]
+			\[ SQR = 93,27126\]
+
+			Logo, sabendo que \text{\large\(S^2 = \frac{SQR}{n-k}\)}:
+			\[S^{2} = \frac{93,27126}{6-3} = 31,09042\]
+
+			Sabendo também que \(VarCov = S^2 \times (X'X)^{-1}\), temos que:
+			\[VarCov = 31,09042 \times (X'X)^{-1}\]
+			\[VarCov =
+				\frac{31,09042}{24064} \times
+				\begin{bmatrix}
+					348800 & -6976 & -7232 \\
+					-6976  & 320   & -96   \\
+					-7232  & -96   & 480
+				\end{bmatrix}
+			\]
+			\[
+				VarCov =
+				\begin{bmatrix}
+					450,64572 & -9,01291 & -9,34366 \\
+					-9,01291  & 0,41344  & -0,12403 \\
+					-9,34366  & -0,12403 & 0,62015
+				\end{bmatrix}
+			\]
+
+			Portanto, temos:
+			\[Var(\hat{\beta_{0}}) = 450,64572\]
+			\[Var(\hat{\beta_{1}}) = 0,41344\]
+			\[Var(\hat{\beta_{2}}) = 0,62015\]
+
+		\end{solution}
+
+	\end{parts}
+
+	\question Conforme Exercício 2
+
+	\begin{solution}
+		Inicialmente utilizamos nossos conhecimentos de regressão simples e sabemos que \text{\large\(\hat{\beta_{1}} = \frac{n \sum XY - \sum X \sum Y}{n \sum X^{2} - (\sum X)^{2}}\)} e que \(\hat{\beta_{0}} = \bar{Y} - \hat{\beta_{1}} \times \bar{X}\).
+
+		Agora precisamos mostrar como calcular os os estimadores de MQO utilizando uma abordagem matricial. Sabendo que \(\sum{u_{i}^{2}} = u'u\), podemos escrever o seguinte:
+
+		\[min\sum{u_{1}^{2}} = min\: u'u\]
+
+		Como \(u' = (Y - X\beta)'\) e \(u = (Y - X\beta)\) temos:
+
+		\[S(\beta) = (Y - X\beta)'(Y - X\beta)\]
+
+		Aplicando a propriedade distributiva:
+
+		\[S(\beta) = Y'Y - Y'X\beta - \beta'X'Y + \beta'X'X\beta\]
+
+		Note que: \(Y'X\beta = \beta'X'Y\). Logo:
+
+		\[S(\beta) = Y'Y - 2\beta'X'Y + \beta'X'X\beta\]
+
+		Resolvendo a condição de primeira ordem, ou seja, para encontrarmos o mínimo local desta função igualamos sua primeira derivada parcial à zero:
+
+		\[\frac{\partial S(\beta)}{\partial \beta'} = 0\]
+		\[\frac{\partial S(\beta)}{\partial \beta'} = -2X'Y + 2X'X\beta = 0\]
+		\[-2X'Y + 2X'X\beta = 0\]
+		\[-2X'Y = -2X'X\beta\]
+		\[X'Y = X'X\beta\]
+		\[X'X\hat{\beta} = X'Y\]
+
+		Podemos multiplicar os dois lados desta equação por \((X'X)^{-1}\) para obtermos o seguinte:
+
+		\[(X'X)^{-1}(X'X)\hat{\beta} = (X'X)^{-1}X'Y\]
+
+		Como \((X'X)^{-1}(X'X) = I\), temos:
+
+		\[I\hat{\beta} = (X'X)^{-1}X'Y\]
+		\[\hat{\beta} = (X'X)^{-1}X'Y\]
+
+		Desta abordagem matricial temos as seguintes matrizes para calcular os estimadores de interesse:
+		\[ X =
+			\begin{bmatrix}
+				1   & X_{1} \\
+				1   & X_{2} \\
+				... & ...   \\
+				1   & X_{n}
+			\end{bmatrix} \quad
+			Y =
+			\begin{bmatrix}
+				Y_{1} \\
+				Y_{2} \\
+				...   \\
+				Y_{n}
+			\end{bmatrix} \quad
+			X' =
+			\begin{bmatrix}
+				1     & 1     & ... & 1     \\
+				X_{1} & X_{2} & ... & X_{n}
+			\end{bmatrix}
+		\]
+
+		Podemos obter, então, a matriz \(X'X\):
+		\[  X'X =
+			\begin{bmatrix}
+				n      & \sum X     \\
+				\sum X & \sum X^{2}
+			\end{bmatrix}
+		\]
+		Invertendo a matriz \(X'X\) obtemos:
+		\[(X'X)^{-1} = \frac{1}{n \sum X^{2} - (\sum X)^{2}} \times
+			\begin{bmatrix}
+				\sum X^{2} & -\sum X \\
+				-\sum X    & n
+			\end{bmatrix}
+		\]
+		Obtemos também a matriz \(X'Y\):
+		\[  X'Y =
+			\begin{bmatrix}
+				\sum Y \\
+				\sum XY
+			\end{bmatrix}
+		\]
+
+		Por fim, obtemos o produto de \((X'X)^{-1}\) por \(X'Y\):
+		\[(X'X)^{-1}X'Y = \hat{\beta} =
+			\frac{1}{n \sum X^{2} - (\sum X)^{2}} \times
+			\begin{bmatrix}
+				\sum X^{2}\sum Y - \sum X\sum XY \\
+				n\sum XY - \sum X\sum Y
+			\end{bmatrix} =
+			\begin{bmatrix}
+				\hat{\beta_{0}} \\
+				\hat{\beta_{1}}
+			\end{bmatrix}
+		\]
+
+		\[\hat{\beta_{0}} = \frac{\sum X^{2}\sum Y - \sum X\sum XY}{n \sum X^{2} - (\sum X)^{2}}\]
+		\[\hat{\beta_{1}} = \frac{n\sum XY - \sum X\sum Y}{n \sum X^{2} - (\sum X)^{2}}\]
+
+		O coeficiente \(\hat{\beta_{1}}\) calculado pela abordagem matricial concorda com o valor conhecido de \(\hat{\beta_{1}}\). Entretanto precisamos mostrar que o valor obtido de \(\hat{\beta_{0}}\) também é equivalente ao valor conhecido. Podemos adotar uma prova por contradição, para fazer isso escreveremos que o \(\hat{\beta_{0}}\) obtido pela via matricial é igual ao valor conhecido de \(\hat{\beta_{0}}\).
+
+		\[ \frac{\sum X^{2}\sum Y - \sum X\sum XY}{n\sum X^{2} - (\sum X)^{2}} = \bar{Y} - \hat{\beta_{1}}\bar{X} \]
+
+		Escrevendo \(\bar{Y}\) e \(\bar{X}\) em termos de somatórios e substituindo \(\hat{\beta_{1}}\) pela sua forma conhecida, temos:
+
+
+		\[ \frac{\sum X^{2}\sum Y - \sum X\sum XY}{n\sum X^{2} - (\sum X)^{2}} = \frac{\sum Y}{n} - \frac{n\sum XY - \sum X\sum Y}{n\sum X^{2} - (\sum X)^{2}} \times  \frac{\sum X}{n}\]
+		\[ \frac{\sum X^{2}\sum Y - \sum X\sum XY}{n\sum X^{2} - (\sum X)^{2}} + \frac{n \sum XY - \sum X\sum Y}{n\sum X^{2} - (\sum X)^{2}} \times \frac{\sum X}{n} = \frac{\sum Y}{n} \]
+		\[ \frac{\sum X^{2}\sum Y - \sum X\sum XY}{n\sum X^{2} - (\sum X)^{2}} + \frac{\sum X(n\sum XY - \sum X\sum Y)}{n(n \sum X^{2} - (\sum X)^{2})} = \frac{\sum Y}{n} \]
+		\[ \frac{n(\sum X^{2}\sum Y - \sum X\sum XY) + \sum X(n\sum XY - \sum X\sum Y)}{n(n \sum X^{2} - (\sum X)^{2})} = \frac{\sum Y}{n} \]
+		\[ \frac{n(\sum X^{2}\sum Y - \sum X\sum XY) + n\sum X\sum XY - \sum X\sum X\sum Y}{n(n \sum X^{2} - (\sum X)^{2})} = \frac{\sum Y}{n} \]
+		\[ \frac{n(\sum X^{2}\sum Y - \sum X\sum XY + \sum X\sum XY) - (\sum X)^{2}  \sum Y}{n(n \sum X^{2} - (\sum X)^{2})} = \frac{\sum Y}{n} \]
+		\[ \frac{n\sum X^{2}\sum Y - (\sum X)^{2}  \sum Y}{n(n\sum X^{2} - (\sum X)^{2})} = \frac{\sum Y}{n} \]
+		\[ \frac{n\sum X^{2}\sum Y - (\sum X)^{2}  \sum Y}{n\sum X^{2} - (\sum X)^{2}} = \sum Y \]
+		\[ n\sum X^{2}\sum Y - (\sum X)^{2}\sum Y = \sum Y(n \sum X^{2} - (\sum X)^{2})\]
+		\[ n\sum X^{2}\sum Y - (\sum X)^{2}\sum Y = n\sum Y\sum X^{2} - \sum Y(\sum X)^{2}\]
+		\[ n\sum X^{2}\sum Y - (\sum X)^{2}\sum Y = n\sum Y\sum X^{2} - (\sum X)^{2}\sum Y\]
+		\[ n\sum X^{2}\sum Y = n\sum Y\sum X^{2} \]
+		\[ n\sum X^{2}\sum Y = n\sum X^{2}\sum Y \]
+		\[ n = n\]
+
+		Portanto, o valor de \(\hat{\beta_{0}}\) obtido pela via matricial é equivalente ao valor conhecido de \(\hat{\beta_{0}}\).
+
+		Precisamos agora mostrar que, ao atendermos H1, os valores dos coeficiente obtidos são não viesados. Para esta condição ser satisfeita precisamos que \(\mathbb{E}(\hat{\beta}) = \beta\)
+
+		Sabemos que:
+		\[\hat{\beta} = (X'X)^{-1}X'Y\]
+
+		E sabemos que:
+		\[Y = X\beta + u\]
+
+		Substituindo \(Y\) na equação de \(\hat{\beta}\), temos:
+		\[\hat{\beta} = (X'X)^{-1}X'(X\beta + u)\]
+		\[\hat{\beta} = (X'X)^{-1}X'X\beta + (X'X)^{-1}X'u\]
+		\[\hat{\beta} = I\beta + (X'X)^{-1}X'u\]
+		\[\hat{\beta} = \beta + (X'X)^{-1}X'u\]
+		\[\mathbb{E}(\hat{\beta} \mid X) = \mathbb{E}(\beta + (X'X)^{-1}X'u \mid X)\]
+		\[\mathbb{E}(\hat{\beta} \mid X) = \mathbb{E}(\beta \mid X) + \mathbb{E}((X'X)^{-1}X' \mid X) \mathbb{E}(u \mid X)\]
+
+		Pela hipótese de exogeneidade sabemos que \(\mathbb{E}(u \mid X) = 0\), logo:
+		\[\mathbb{E}(\hat{\beta} \mid X) = \mathbb{E}(\beta \mid X) + \mathbb{E}((X'X)^{-1}X' \mid X) \times 0\]
+		\[\mathbb{E}(\hat{\beta} \mid X) = \mathbb{E}(\beta \mid X)\]
+		\[\mathbb{E}(\hat{\beta} \mid X) = \beta\]
+
+	\end{solution}
+
+\end{questions}
+\end{document}

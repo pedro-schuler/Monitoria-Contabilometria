@@ -1,0 +1,115 @@
+\documentclass[12pt,a4paper,titlepage=false]{scrartcl}
+
+\usepackage{luatex85}
+\usepackage{fontspec}
+\usepackage[brazilian]{babel}
+\usepackage{microtype}
+\usepackage{indentfirst}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{csquotes}
+\usepackage{xfrac}
+\usepackage[automark]{scrlayer-scrpage}
+
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Courier New}
+
+\addtokomafont{disposition}{\boldmath}
+
+\clearpairofpagestyles
+\rohead{\pagemark}
+
+\onehalfspacing
+\recalctypearea
+\AfterCalculatingTypearea{\newgeometry{left=3cm, right=2cm, top=3cm, bottom=2cm}}
+
+\title{Variação cambial}
+\author{Pedro Schuler \thanks{\href{mailto:pedro.schuler@ufpe.br}{pedro.schuler@ufpe.br}}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{O problema}
+Algumas vezes podemos nos deparar com cenários em que é necessário efetuar uma multiplicação ao divisão de uma das variáveis independentes. Dessa forma podemos nos perguntar o que acontecerá com o estimador desta variável, com os estimadores de outras variáveis, com a variância desta variável e com o \(\bar{R^{2}}\). Veremos a seguir o impacto de cada uma destas questões.
+
+\section{A solução}
+
+\subsection{Os estimadores}
+Utilizando um modelo de regressão simples e assumindo que a variável X será multiplicada por uma constante \(\alpha\).
+
+Sabemos que:
+\[\hat{\beta_{1}} = \frac{n\sum{XY} - \sum{X}\sum{Y}}{n\sum{X^{2}}} - (\sum{X})^{2}\]
+\[\hat{\beta_{0}} = \bar{Y} - \hat{\beta_{1}}\bar{X}\]
+
+Utilizando as propriedades do somatório e multiplicando X por uma constante \(\alpha\):
+\[\hat{\beta_{1}} = \frac{n\sum{\alpha XY} - \sum{\alpha X}\sum{Y}}{n\sum{(\alpha X)^2} - (\sum{\alpha X})^{2}}\]
+\[\hat{\beta_{1}} = \frac{\alpha n\sum{XY} - \alpha \sum{X}\sum{Y}}{(\alpha)^2 n\sum{X^{2}} - (\alpha)^{2}(\sum{X})^{2}}\]
+\[\hat{\beta_{1}} = \frac{\alpha \times (n\sum{XY} - \sum{X}\sum{Y})}{(\alpha)^2 \times (n\sum{X^{2}} - (\sum{X})^{2})}\]
+\[\hat{\beta_{1}} = \frac{\alpha}{\alpha^{2}} \times \frac{n\sum{XY} - \sum{X}\sum{Y})}{n\sum{X^{2}} - (\sum{X})^{2})}\]
+\[\hat{\beta_{1}} = \frac{1}{\alpha} \times \frac{n\sum{XY} - \sum{X}\sum{Y})}{n\sum{X^{2}} - (\sum{X})^{2})}\]
+\[\hat{\beta_{1}} = \frac{1}{\alpha} \times \hat{\beta_{1}^{\ast}}\]
+
+Onde \(\hat{\beta_{1}^{\ast}}\) é o valor do estimador calculado antes da modificação da variável (multiplicação).
+
+Aplicando a mesma lógica ao \(\beta_{0}\) e sabendo que ao multiplicarmos todos os valores de X por uma constante sua média também será multiplicada pela mesma constante:
+\[\hat{\beta_{0}} = \bar{Y} - \hat{\beta_{1}}\bar{X}\]
+\[\hat{\beta_{0}} = \bar{Y} - \frac{1}{\alpha}\hat{\beta_{1}^{\ast}}\alpha\bar{X}\]
+\[\hat{\beta_{0}} = \bar{Y} - \hat{\beta_{1}^{\ast}}\bar{X}\]
+\[\hat{\beta_{0}} = \hat{\beta_{0}^{\ast}}\]
+
+Onde \(\hat{\beta_{1}^{\ast}}\) e \(\hat{\beta_{0}^{\ast}}\) são os valores dos estimadores calculados antes da modificação da variável (multiplicação).
+
+Vemos assim que a variável que sofreu a modificação teve seu estimador multiplicado por \(\sfrac{1}{\alpha}\) enquanto o outro estimador permaneceu inalterado.
+
+\subsection{O \(R^{2}\)}
+Sabemos que:
+\[R^{2} = 1 - \frac{SQR}{SQT}\]
+
+Sabemos também que:
+\[SQT = \sum{(Y_{i} - \bar{Y})^{2}}\]
+
+Como SQT não depende de variações de X, ele permanecerá inalterado.
+
+Procedendo ao cálculo de SQR temos:
+\[SQR = \sum{(Y_{i} - \hat{Y_{i}})^{2}}\]
+\[SQR = \sum{(Y_{i} - \hat{Y_{i}})^{2}}\]
+
+Resolvendo \(Y_{i} - \hat{Y}_{i}\) temos:
+\[Y_{i} - (\hat{\beta_{0}} + \hat{\beta_{1}}X_{i})\]
+\[Y_{i} - (\hat{\beta_{0}^{\ast}} + \frac{1}{\alpha} \times \hat{\beta_{1}^{\ast}}\alpha X_{i})\]
+\[Y_{i} - (\hat{\beta_{0}^{\ast}} + \hat{\beta_{1}^{\ast}}X_{i})\]
+
+Onde \(\hat{\beta_{1}^{\ast}}\) e \(\hat{\beta_{0}^{\ast}}\) são os valores dos estimadores calculados antes da modificação da variável (multiplicação). Vemos assim que o \(R^{2}\) também permanece inalterado.
+
+\subsection{A variância}
+Sabemos que:
+\[Var(\hat{\beta_{0}}) = \frac{\sigma^{2}\sum{X_{i}^{2}}}{n\sum{(X_{i} - \bar{X})^{2}}}\]
+\[Var(\hat{\beta_{1}}) = \frac{\sigma^{2}}{\sum{(X_{i} - \bar{X})^{2}}}\]
+
+Calculando a \(Var(\hat{\beta_{1}})\) ao multiplicar a variável X por \(\alpha\) temos:
+\[Var(\hat{\beta_{1}}) = \frac{\sigma^{2}}{\sum{(\alpha X_{i} - \alpha\bar{X})^{2}}}\]
+\[Var(\hat{\beta_{1}}) = \frac{\sigma^{2}}{\sum{((\alpha) \times (X_{i} - \bar{X}))^{2}}}\]
+\[Var(\hat{\beta_{1}}) = \frac{\sigma^{2}}{\alpha^{2} \times \sum{(X_{i} - \bar{X})^{2}}}\]
+\[Var(\hat{\beta_{1}}) = \frac{1}{\alpha^{2}} \times \frac{\sigma^{2}}{\sum{(X_{i} - \bar{X})^{2}}}\]
+\[Var(\hat{\beta_{1}}) = \frac{1}{\alpha^{2}} \times Var(\hat{\beta_{1}^{\ast}})\]
+
+Onde \(Var(\hat{\beta_{1}^{\ast}})\) é o valor da variância de \(\hat{\beta_{1}}\) calculado antes da modificação da variável (multiplicação).
+
+Repetindo o cálculo para \(Var(\hat{\beta_{0}})\):
+\[Var(\hat{\beta_{0}}) = \frac{\sigma^{2}\sum{(\alpha X_{i})^{2}}}{n\sum{(\alpha X_{i} - \alpha\bar{X})^{2}}}\]
+\[Var(\hat{\beta_{0}}) = \frac{\sigma^{2}\alpha^{2}\sum{X_{i}^{2}}}{n\sum{(\alpha \times (X_{i} - \bar{X}))^{2}}}\]
+\[Var(\hat{\beta_{0}}) = \frac{\alpha^{2}\sigma^{2}\sum{X_{i}^{2}}}{\alpha^{2}n\sum{(X_{i} - \bar{X})^{2}}}\]
+\[Var(\hat{\beta_{0}}) = \frac{\alpha^{2}}{\alpha^{2}} \times \frac{\sigma^{2}\sum{X_{i}^{2}}}{n\sum{(X_{i} - \bar{X})^{2}}}\]
+\[Var(\hat{\beta_{0}}) = 1 \times \frac{\sigma^{2}\sum{X_{i}^{2}}}{n\sum{(X_{i} - \bar{X})^{2}}}\]
+\[Var(\hat{\beta_{0}}) = \frac{\sigma^{2}\sum{X_{i}^{2}}}{n\sum{(X_{i} - \bar{X})^{2}}}\]
+\[Var(\hat{\beta_{0}}) = Var(\hat{\beta_{0}^{\ast}})\]
+
+Onde \(Var(\hat{\beta_{0}^{\ast}})\) é o valor da variância de \(\hat{\beta_{0}}\) calculado antes da modificação da variável (multiplicação).
+
+Ou seja: a variável que sofreu a modificação terá sua variância multiplicada por \(\sfrac{1}{\alpha^{2}}\) e a variância das outras variáveis permanecerão inalteradas.
+\end{document}

@@ -1,0 +1,200 @@
+\documentclass[]{ufpe-exercises}
+\usepackage[most]{tcolorbox}
+
+\curso{Ciências Contábeis}
+\discente{Pedro Malta Schuler Caloête}
+\centro{Centro de Ciências Sociais Aplicadas}
+\departamento{Departamento de Ciências Contábeis e Atuariais}
+\titulo{Regressão Múltipla}
+\disciplina{Contabilometria}
+\docente{Giuseppe Trevisan}
+\periodo{2026.1}
+\corcabecalho{red4}
+
+\begin{document}
+
+\cabecalho
+
+\begin{questions}
+	\question Em decorrência de uma série de escândalos corporativos nos mercados financeiros internacionais nas décadas de 1990 e 2000, a bolsa de valores do Brasil (B3) implementou uma reforma regulatória para melhorar aspectos de governança corporativa. A reforma foi anunciada ao mercado no dia 10 de maio de 2011, na abertura da Bolsa, e teve vigência imediata. Dentre as normativas, constavam cláusulas que proibiam o acúmulo de cargos de CEO e presidente do Conselho de Administração por um único indivíduo, código de transparência dos diretores, cláusulas de proteção de acionistas minoritários, entre outras. Uma corrente da literatura especializada afirma que tais medidas são vistas de forma positiva pelos acionistas, uma vez que tendem a diminuir conflitos de agência e melhorar a transparência financeira. Portanto, essa literatura prevê uma valorização no valor da empresa. Nesse contexto, você decide investigar se a divulgação da regulação provoca um efeito no valor da ação. Para isso, você coletou informações do preço médio da das ações, três dias antes e dois dias depois do anúncio da regulação. A intenção é usar \enquote{descontinuidade} no conhecimento da informação por parte do mercado (choque informacional) acerca da regulação para estimar seu efeito sobre o valor das ações. (\textit{Comentário: talvez seja interessante criar uma variável binária.})
+
+	\centering{Dados}
+	\begin{table}[ht]
+		\centering
+		\begin{tblr}{lcccr}
+			\hline\hline
+			i & Dia da semana & Preço médio (R\$) & Número de investidores & Dia do ano \\\hline
+			1 & Quinta        & 45                & 900                    & 5 de maio  \\
+			2 & Sexta         & 42                & 1000                   & 6 de maio  \\
+			3 & Segunda       & 43,5              & 800                    & 9 de maio  \\
+			4 & Terça         & 50                & 900                    & 10 de maio \\
+			5 & Quarta        & 37                & 1000                   & 11 de maio \\
+		\end{tblr}
+	\end{table}
+
+	\begin{parts}
+		\part Estime o efeito do anúncio da regulação sobre o preço médio das ações. Assumindo exogeneidade do modelo proposto, qual a interpretação do parâmetro de interesse (responda também se a relação encontrada corrobora a hipótese da literatura)? Ademais, qual a interpretação do coeficiente linear encontrado?
+		\begin{solution}
+			Sabemos que:
+			\[\hat{\beta_1} = \frac{n\sum{XY} - \sum{X}\sum{Y}}{n\sum{X^2} - {\sum{X}}^2}\]
+			Também sabemos que:
+			\[\hat{\beta_0} = \bar{Y} - \hat{\beta_1}\bar{X}\]
+
+			Como estamos interessados no efeito do anúncio sobre o preço médio das ações, a variável dependente (Y) é o preço médio das ações e a variável independente (X) é o Dia do ano. A variável Dia do ano, entretanto, precisa ser transformada numa variável quantitativa, e para isso podemos transformá-la numa variável binária onde:
+			\[
+				0 = \textrm{Antes do anúncio} \quad 1 = \textrm{Após o anúncio}
+			\]
+
+			Dessa forma podemos construir a seguinte tabela:
+			\vspace{0.3cm}
+			\begin{center}
+				\begin{tblr}{lcccc}
+					\hline\hline
+					         & Y (Preço Médio (R\$)) & X (Dia do ano) & \(X \times Y\) & \(X^2\) \\\hline
+					1        & 45                    & 0              & 0              & 0       \\
+					2        & 42                    & 0              & 0              & 0       \\
+					3        & 43,5                  & 0              & 0              & 0       \\
+					4        & 50                    & 1              & 50             & 1       \\
+					5        & 37                    & 1              & 37             & 1       \\\hline
+					\(\sum\) & 217,5                 & 2              & 87             & 2
+				\end{tblr}
+			\end{center}
+
+			Logo, podemos calcular \(\hat{\beta_1}\) da seguinte forma:
+			\[\hat{\beta_1} = \frac{5 \times 87 - 2 \times 217,5}{5 \times 2 - 2^2} = 0\]
+
+			Se \(\hat{\beta_1} = 0\), temos que \(\hat{\beta_0}\) é:
+			\[ \hat{\beta_0} = \frac{217,5}{43,5} - 0 \times \frac{2}{5} = 43,5 \]
+
+			Dessa forma, interpretando o parâmetro de interesse (\(\hat{\beta_1}\)) chegamos à conclusão de que não existe uma relação de regressão linear entre as duas variáveis. Assim, concluímos que a relação encontrada não corrobora a hipótese da literatura.
+
+			\begin{tcolorbox}[colback=red!5!white,colframe=red!75!black,title=Atenção]
+				Porque o parâmetro de interesse é \(\hat{\beta_1}\)?
+			\end{tcolorbox}
+
+			O coeficiente linear encontrado (\(\hat{\beta_0}\)) nos informa que o preço médio das ações antes do anúncio é igual a R\$ 43,5.
+
+		\end{solution}
+		\vspace{0.3cm}
+		\part Uma vez que a Lei da Oferta e Demanda opera nesse mercado, estime os parâmetros de um modelo de regressão múltipla que permita controlar pela influência da quantidade de investidores sobre o preço. Interprete o parâmetro de interesse (\(\beta_1^*\)).
+		\begin{solution}
+			Num modelo de regressão múltipla sabemos que que podemos calcular os estimadores da seguinte forma:
+			\[\hat{\beta} = (X'X)^{-1}X'Y\]
+			onde \(\hat{\beta}\), \(X'\), \(X\) e \(Y\) são matrizes.
+
+			Da questão anterior temos que a variável dependente (\(Y\)) é o preço médio das ações, uma das variáveis independentes (\(X_1\)) é o dia do ano, e introduziremos a segunda variável independente (\(X_2\)) como sendo a quantidade de investidores.
+
+			No caso em estudo, teremos, então, as seguintes matrizes:
+			\[ Y =
+				\begin{bmatrix}
+					45   \\
+					42   \\
+					43,5 \\
+					50   \\
+					37   \\
+				\end{bmatrix} \quad
+				X =
+				\begin{bmatrix}
+					1 & 0 & 900  \\
+					1 & 0 & 1000 \\
+					1 & 0 & 800  \\
+					1 & 1 & 900  \\
+					1 & 1 & 1000 \\
+				\end{bmatrix}
+			\]
+
+			Inicialmente podemos simplificar os cálculos dividindo os valores da variável \(X_2\) por 100, o que resultará nas seguinte matrizes:
+
+			\[
+				X =
+				\begin{bmatrix}
+					1 & 0 & 9  \\
+					1 & 0 & 10 \\
+					1 & 0 & 8  \\
+					1 & 1 & 9  \\
+					1 & 1 & 10
+				\end{bmatrix} \quad
+				X' =
+				\begin{bmatrix}
+					1 & 1  & 1 & 1 & 1  \\
+					0 & 0  & 0 & 1 & 1  \\
+					9 & 10 & 8 & 9 & 10
+				\end{bmatrix}
+			\]
+
+			De onde concluímos que:
+
+			\[
+				X'X =
+				\begin{bmatrix}
+					5  & 2  & 46  \\
+					2  & 2  & 19  \\
+					46 & 19 & 426
+				\end{bmatrix} \quad
+				X'Y =
+				\begin{bmatrix}
+					217,5 \\
+					87    \\
+					1993
+				\end{bmatrix}
+			\]
+
+			Precisamos agora inverter a matriz \(X'X\). Os passos detalhados de inversão de matrizes podem ser encontrados a partir da página 27 da apostila do professor. Mas podemos resumir os passos principais dizendo que:
+			\[
+				\textit{det}(X'X) = 4260 + 1748 + 1748 - 4232 - 1805 - 1704 = 15
+			\]
+			\[
+				(X'X)^{-1} = \frac{1}{15}
+				\begin{bmatrix}
+					491 & 22 & -54 \\
+					22  & 14 & -3  \\
+					-54 & -3 & 6
+				\end{bmatrix}
+			\]
+
+			\begin{tcolorbox}[colback=red!5!white,colframe=red!75!black,title=Atenção]
+				Tentem fazer a inversão de matrizes sozinhos. É importante para treinar.
+			\end{tcolorbox}
+
+			Sabendo os resultados de \((X'X)^{-1}\) e \(X'Y\) podemos calcular a matriz dos estimadores, logo:
+
+			\[
+				(X'X)^{-1}X'Y =
+				\begin{bmatrix}
+					72,3 \\
+					1,6  \\
+					-3,2
+				\end{bmatrix} =
+				\begin{bmatrix}
+					\hat{\beta_0} \\
+					\hat{\beta_1} \\
+					\hat{\beta_2} \\
+				\end{bmatrix}
+			\]
+
+			Entretanto havíamos dividido os valores de \(X_2\) por 100, nesse caso precisamos dividir também o estimador associado a esta variável (\(\hat{\beta_2}\)) por 100. Chegamos, então ao resultado final:
+
+			\[
+				(X'X)^{-1}X'Y =
+				\begin{bmatrix}
+					72,3 \\
+					1,6  \\
+					-0,032
+				\end{bmatrix} =
+				\begin{bmatrix}
+					\hat{\beta_0} \\
+					\hat{\beta_1} \\
+					\hat{\beta_2} \\
+				\end{bmatrix}
+			\]
+
+			\begin{tcolorbox}[colback=red!5!white,colframe=red!75!black,title=Atenção]
+				Se já havíamos dividido os valores da variável por 100, por que precisamos dividir novamente o estimador associado a esta variável por 100?
+			\end{tcolorbox}
+
+			Dessa forma chegamos à interpretação do parâmetro de interesse, nos mostrando que após o anúncio o preço médio das ações aumentou, em média, em R\$ 1,6.
+		\end{solution}
+	\end{parts}
+
+\end{questions}
+\end{document}
