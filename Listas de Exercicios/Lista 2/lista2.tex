@@ -1,5 +1,6 @@
 \documentclass[]{ufpe-exercises}
 \usepackage{hyperref}
+\usepackage[most]{tcolorbox}
 
 \curso{Ciências Contábeis}
 \discente{Pedro Malta Schuler Caloête}
@@ -10,6 +11,18 @@
 \docente{Giuseppe Trevisan}
 \periodo{2026.1}
 \corcabecalho{red4}
+
+\newtcolorbox{myalert}[1]{%
+  colback=red9,           % Cor de fundo (tom bem claro de vermelho do ninecolors)
+  colframe=red4,          % Cor da borda/cabeçalho (o red4 solicitado)
+  coltitle=white,         % Cor do texto do título
+  fonttitle=\bfseries,    % Fonte do título em negrito
+  title=#1,               % Define o argumento como o título da caixa
+  sharp corners=downhill, % Efeito estético nas quinas (opcional)
+  enhanced,               % Ativa recursos avançados de estilização
+  attach boxed title to top left={yshift=-2mm, xshift=2mm}, % Posiciona o título como uma aba
+  boxed title style={colback=red4}, % Fundo da aba do título
+}
 
 \begin{document}
 
@@ -24,40 +37,113 @@
 		\part
 
 		\begin{solution}
-			Como estamos trabalhando com um modelo \(log-lin\), precisamos linearizar nossa variável dependente antes de efetuarmos os cálculos. desejamos obter o seguinte modelo:
+			Precisamos, inicialmente, identificar quais dados serão utilizados na nossa regressão e fazer as operações adequadas para loglinearizar nossa variável independente.
 
-			\[log(Preco Acao) = \beta_{0} + \beta_{1} \times Gastos Dos Pares\]
-
-			Podemos, então, montar nossa tabela:
+			\vspace{0.2cm}
 
 			\begin{center}
 				\begin{tblr}{
-						colspec = {X[c] X[c] X[c] X[c] X[c] X[c]},
-						hlines,
-						vlines
+						colspec = {l c r}, % Utiliza os especificadores tradicionais
 					}
-					\hline
-					Empresa  & Preço da Ação (Y) & log(Preço da Ação) & Gastos dos Pares (X) & \(X \times Y\) & \(X^2\) \\
-					1        & 21,0              & 3,045              & 35                   & 625            & 1.225   \\
-					2        & 23,5              & 3,157              & 28                   & 784            & 784     \\
-					3        & 14,6              & 2,681              & 60                   & 1225           & 3.600   \\
-					4        & 13,1              & 2,573              & 71                   & 400            & 5.041   \\
-					5        & 20,0              & 2,996              & 44                   & 625            & 1.936   \\
-					6        & 18,1              & 2,896              & 45                   & 900            & 2.025   \\
-					7        & 20,2              & 3,006              & 58                   & 1225           & 3.364   \\
-					8        & 18,5              & 2,918              & 44                   & 625            & 1.936   \\
-					\(\sum\) & ---               & 23,272             & 385                  & 1.103,398      & 19.911  \\
+					\toprule\toprule % Linha dupla no topo
+					{Preço da         \\ Ação} & {ln(Preço \\ da Ação)} & {Gastos dos \\ pares} \\
+					\midrule         % Linha divisória do cabeçalho
+					21,0 & 3.045 & 35 \\
+					23,5 & 3,157 & 28 \\
+					14,6 & 2,681 & 60 \\
+					13,1 & 2,573 & 71 \\
+					20,0 & 2,996 & 44 \\
+					18,1 & 2,896 & 45 \\
+					20,2 & 3,006 & 58 \\
+					18,5 & 2,918 & 44 \\
+					\bottomrule      % Linha de fechamento na base
 				\end{tblr}
 			\end{center}
 
-			\(\hat{\beta_{1}}\) pode ser definido da seguinte forma:
-			\[\hat{\beta_{1}} = \frac{n\sum (X_{i}Y_{i}) - \sum Y_{i}\sum X_{i}}{n\sum X^2 - (\sum X_{i})^2}\]
-			Agora podemos utilizar os valores da tabela criada para calcular \(\hat{\beta_{1}}\).
-			\[ \hat{\beta_{1}} = \frac{8 \times 1103,398 - 385 \times 23,272}{8 \times 19911 - (385)^2} = -0,01198 \]
-			\(\hat{\beta_{0}}\) pode ser definido como \(\hat{\beta_{0}} = \bar{Y} - \beta_{1} \times \bar{X}\), logo:
-			\[ \hat{\beta_{0}} = \frac{23,272}{8} - 0,01198 \times \frac{385}{8} = 3,48554 \]
+			\vspace{0.2cm}
 
-			Sabendo que nosso regressor é contínuo, e agora que temos os valores de \(\hat{\beta_{0}}\) e \(\hat{\beta_{1}}\) podemos interpretar o seguinte: quando os gastos com controle interno dos pares forem igual a 0, o preço da ação será, em média, igual a R\$ 3.485,54 mil reais. O \(\hat{\beta_{1}}\) nos informa que, quando os gatos com controle interno dos pares aumenta em mil reais, o preço da ação diminui, em média, em 1,198\%.
+			Poderíamos utilizar as fórmulas conhecidas para cálculo de \(\hat{\beta_{0}}\) e \(\hat{\beta_{1}}\), porém, neste exercício, adotaremos uma abordagem matricial. Neste caso, construindo as matrizes relevantes temos:
+			\[ X =
+				\begin{bmatrix}
+					1 & 35 \\
+					1 & 28 \\
+					1 & 60 \\
+					1 & 71 \\
+					1 & 44 \\
+					1 & 45 \\
+					1 & 58 \\
+					1 & 44 \\
+				\end{bmatrix} \quad
+				X' =
+				\begin{bmatrix}
+					1  & 1  & 1  & 1  & 1  & 1  & 1  & 1  \\
+					35 & 28 & 60 & 71 & 44 & 45 & 58 & 44 \\
+				\end{bmatrix} \quad
+				Y =
+				\begin{bmatrix}
+					3,045 \\
+					3,157 \\
+					2,681 \\
+					2,573 \\
+					2,996 \\
+					2,896 \\
+					3,006 \\
+					2,918 \\
+				\end{bmatrix}
+			\]
+
+			Como sabemos, podemos agora calcular a nossa matriz de estimadores da seguinte forma: \(\hat{\beta} = (X'X)^{-1}X'Y\). Para tanto, calcularemos inicialmente \((X'X)^{-1}\).
+
+			Começamos definindo \((X'X)\):
+			\[
+				(X'X) =
+				\begin{bmatrix}
+					8   & 385   \\
+					385 & 19911 \\
+				\end{bmatrix}
+			\]
+
+			Sabemos que \((X'X)^{-1} = \frac{1}{det(X'X)} \times Adj(X'X)\). Dessa forma vamos calcular \(det(X'X)\) e \(Adj(X'X)\)
+			\[ det(X'X) = 11063 \qquad
+				Adj(X'X) =
+				\begin{bmatrix}
+					19911 & -385 \\
+					-385  & 8    \\
+				\end{bmatrix}
+			\]
+
+			Logo,
+			\[
+				(X'X)^{-1} = \frac{1}{11063}
+				\begin{bmatrix}
+					19911 & -385 \\
+					-385  & 8    \\
+				\end{bmatrix}
+			\]
+
+			Obtemos agora a matrix \(X'Y\), que é igual a:
+			\[
+				X'Y =
+				\begin{bmatrix}
+					23,272   \\
+					1103,398 \\
+				\end{bmatrix}
+			\]
+
+			Podemos, por fim, obter a matriz dos estimadores:
+			\[
+				\hat{\beta} = (X'X)^{-1}X'Y =
+				\begin{bmatrix}
+					3,48554  \\
+					-0,01198 \\
+				\end{bmatrix} =
+				\begin{bmatrix}
+					\hat{\beta_{0}} \\
+					\hat{\beta_{1}} \\
+				\end{bmatrix}
+			\]
+
+			Por termos uma regressão do tipo \textit{log-lin} com um regressor contínuo, nossa interpretação será de que uma variação em \(X\) provoca uma variação percentual em \(Y\). Logo, temos que: um aumento de R\$ 1.000,00 nos gastos com pares provoca uma \textbf{diminuição} de (\(\beta \times 100\%\)) 1,198\% no preço das ações.
 
 		\end{solution}
 
@@ -66,674 +152,1194 @@
 		\part
 
 		\begin{solution}
+			Sabemos que o teste t, neste caso, é dado por \(\frac{\hat{\beta_{1}} - \beta^{H0}_{1}}{\sqrt{\widehat{Var(\beta_{1})}}}\), e que \(\beta^{H0}_{1} = 0\).
 
-			A variância do erro, denotada por \(\sigma^{2}\), é um parâmetro populacional e, portanto, desconhecido. Para estimá-lo podemos utilizar os seguintes estimadores:
+			Precisamos calcular, portanto, \(\widehat{Var(\beta_{1}})\). Para isso utilizaremos a matriz de variância-covariância. Precisamos, então, calcular o valor de \(S^{2}\).
+
 			\[
-				S^{2} = \frac{\sum \hat{u_i^2}}{n-k} \quad
-				\hat{\sigma^2}= \frac{\sum \hat{u_i^2}}{n}
+				S^{2} = \frac{SQR}{n - k} \qquad
+				SQR = \sum (Y - \hat{Y})^{2}
+			\]
+			\begin{align*}
+				[3.045 - (3,48554 - 0,01198 \times 35)]^{2} & = 0,01850 \\
+				[3,157 - (3,48554 - 0,01198 \times 28)]^{2} & = 0,06150 \\
+				[2,681 - (3,48554 - 0,01198 \times 60)]^{2} & = 0,05198 \\
+				[2,573 - (3,48554 - 0,01198 \times 71)]^{2} & = 0,11290 \\
+				[2,996 - (3,48554 - 0,01198 \times 44)]^{2} & = 0,00757 \\
+				[2,896 - (3,48554 - 0,01198 \times 45)]^{2} & = 0,00017 \\
+				[3,006 - (3,48554 - 0,01198 \times 58)]^{2} & = 0,00941 \\
+				[2,918 - (3,48554 - 0,01198 \times 44)]^{2} & = 0,00008 \\
+			\end{align*}
+			\[ SQR = 0,06362 \]
+			\[ S^{2} = \frac{SQR}{n - k} = \frac{0,06362}{8 - 2} = 0,01060 \]
+
+			Sabemos também que:
+			\[
+				(X'X)^{-1} = \frac{1}{11063}
+				\begin{bmatrix}
+					19911 & -385 \\
+					-385  & 8    \\
+				\end{bmatrix}
 			\]
 
-			Inicialmente precisamos calcular o somatório do quadrado dos resíduos (SQR).
-			\[SQR = \sum (Y - \widehat{Y})^{2}\]
-			\[ [ 3,0 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25)]^{2} =  0,08563 \]
-			\[ [ 3,5 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 28)]^{2} =  0,00295 \]
-			\[ [ 3,6 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 35)]^{2} =  0,04118 \]
-			\[ [ 3,1 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 20)]^{2} =  0,00391 \]
-			\[ [ 3,3 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25)]^{2} =  0,00005 \]
-			\[ [ 3,8 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 30)]^{2} =  0,06361 \]
-			\[ [ 4,0 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 35)]^{2} =  0,03884 \]
-			\[ [ 3,1 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25)]^{2} =  0,03711 \]
-			\[ [ 3,2 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 20)]^{2} =  0,02641 \]
-			\[ [ 3,5 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 30)]^{2} =  0,00228 \]
-			\[ SQR = 0,30197\]
+			E sabemos que a matriz de variância-covariância é dada por \(VarCov = S^{2}(X'X)^{-1}\).
+
+			Portanto, utilizando o valor apropriado da matriz de variância-covariância, temos que o valor de \(\widehat{Var(\beta_{1})}\) é:
+			\[\widehat{Var(\beta_{1})} = 0,01060 \times \frac{8}{11063} = 0,0000076\]
+
+			Logo, o valor do teste t é dado por:
+			\[ t = \frac{-0,01198}{\sqrt{0,0000076}} = -4,34560 \]
+
+			Verificando numa tabela do teste t para o nível de significância de 5\% e com \((n - k) = 6\) graus de liberdade, temos que:
+			\[ t^{*} = 2,447 \]
+
+			Como:
+			\[\lvert -4,34560 \rvert > \lvert 2,447 \rvert\]
+
+			Rejeitamos a hipótese nula ao nível de confiança de 95\%.
+
+			Como temos uma regressão simples, podemos calcular o teste F da seguinte forma:
+			\[ F \approx t^{2} \]
+
+			Portanto:
+			\[ F \approx (-4,34560)^{2} = 18,71774 \]
+
+			Verificando numa tabela do teste F para o nível de significância de 5\% e com \((n - k) = 6\) graus de liberdade no denominador, temos que:
+			\[ F_{1,6} = F^{*} = 5,99 \]
+
+			Como \(\lvert 18,71774 \rvert > \lvert 5,99 \rvert\), rejeitamos a hipótese nula ao nível de confiança de 95\%.
+
+			O intervalo de confiança IC pode ser calculado da seguinte forma:
+			\[IC_{95\%} = [\hat{\beta_{1}} - t^{*}\sqrt{\widehat{Var(\beta_{1})}}; \hat{\beta_{1}} + t^{*}\sqrt{\widehat{Var(\beta_{1})}}]\]
+
+			Sabendo que:
+			\begin{gather*}
+				\hat{\beta_{1}} = -0,01198 \\
+				t^{*} = 2,447 \\
+				\widehat{Var{\beta_{1}}} = 0,0000076
+			\end{gather*}
+
+			Logo, o intervalo de confiança pretendido é dado por:
+			\begin{align*}
+				IC_{95\%} & = [-0,01198 - 2,447 \times \sqrt{0,0000076}; -0,01198 + 2,447 \times \sqrt{0,0000076}] \\
+				IC_{95\%} & = [-0,01872; -0,00523]
+			\end{align*}
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+			Sabemos que o \(R^{2}\) é dado por:
+			\[ R^{2} = 1 - \frac{SQR}{SQT} \]
+
+			Como já calculamos SQR, calcularemos agora o SQT:
+			\[ SQT = \sum (Y_{i} - \bar{Y_{1}})^{2} \]
+			\begin{align*}
+				(Y_{1} - \bar{Y})^{2} & = (3,045 - 2,909)^{2} = 0,01850 \\
+				(Y_{2} - \bar{Y})^{2} & = (3,157 - 2,909)^{2} = 0,06150 \\
+				(Y_{3} - \bar{Y})^{2} & = (2,681 - 2,909)^{2} = 0,05198 \\
+				(Y_{4} - \bar{Y})^{2} & = (2,573 - 2,909)^{2} = 0,11290 \\
+				(Y_{5} - \bar{Y})^{2} & = (2,996 - 2,909)^{2} = 0,00757 \\
+				(Y_{6} - \bar{Y})^{2} & = (2,896 - 2,909)^{2} = 0,00017 \\
+				(Y_{7} - \bar{Y})^{2} & = (3,006 - 2,909)^{2} = 0,00941 \\
+				(Y_{8} - \bar{Y})^{2} & = (2,918 - 2,909)^{2} = 0,00008 \\
+			\end{align*}
+			\[ SQT = 0,26211 \]
+
+			Logo,
+			\[R^{2} = 1 - \frac{SQR}{SQT} = 1 - \frac{0,06362}{0,26211} = 0,75728\]
+
+			Semelhantemente, o cálculo do \(\bar{R^{2}}\) é dado por:
+			\begin{align*}
+				\bar{R^{2}} & = 1 - \frac{SQR}{SQT} \times \frac{n - 1}{n - k}           \\
+				\bar{R^{2}} & = 1 - \frac{0,06362}{0,26211} \times \frac{7}{6} = 0,71682
+			\end{align*}
+
+			A interpretação do \(R^{2}\) é direta: 75,728\% da variabilidade observada no preço das ações é explicada pela variabilidade dos gastos com controle interno dos pares.
+
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+			Precisamos adicionar aos dados constantes na letra a) uma nova variável para efetuar nossa regressão. Assim obtemos o seguinte conjunto de dados:
+
+			\vspace{0.2cm}
+
+			\begin{center}
+				\begin{tblr}{
+						colspec = {l c c r}, % Utiliza os especificadores tradicionais
+					}
+					\toprule\toprule % Linha dupla no topo
+					{Preço da               \\ Ação} & {ln(Preço da \\ Ação)} & {Gastos dos \\ pares} & {Habilidade \\ do CFO} \\
+					\midrule         % Linha divisória do cabeçalho
+					21,0 & 3.045 & 35 & 5,0 \\
+					23,5 & 3,157 & 28 & 6,2 \\
+					14,6 & 2,681 & 60 & 9,5 \\
+					13,1 & 2,573 & 71 & 8,0 \\
+					20,0 & 2,996 & 44 & 7,9 \\
+					18,1 & 2,896 & 45 & 7,0 \\
+					20,2 & 3,006 & 58 & 8,5 \\
+					18,5 & 2,918 & 44 & 6,8 \\
+					\bottomrule      % Linha de fechamento na base
+				\end{tblr}
+			\end{center}
+
+			\vspace{0.2cm}
+
+			Assim, podemos novamente obter as matrizes relevantes para o cálculo da regressão da seguinte forma:
+			\[ X =
+				\begin{bmatrix}
+					1 & 35 & 5,0 \\
+					1 & 28 & 6,2 \\
+					1 & 60 & 9,5 \\
+					1 & 71 & 8,0 \\
+					1 & 44 & 7,9 \\
+					1 & 45 & 7,0 \\
+					1 & 58 & 8,5 \\
+					1 & 44 & 6,8 \\
+				\end{bmatrix} \qquad
+				X' =
+				\begin{bmatrix}
+					1   & 1   & 1   & 1   & 1   & 1   & 1   & 1   \\
+					35  & 28  & 60  & 71  & 44  & 45  & 58  & 44  \\
+					5,0 & 6,2 & 9,5 & 8,0 & 7,9 & 7,0 & 8,5 & 6,8 \\
+				\end{bmatrix}
+			\]
+			\[
+				Y =
+				\begin{bmatrix}
+					3,045 \\
+					3,157 \\
+					2,681 \\
+					2,573 \\
+					2,996 \\
+					2,896 \\
+					3,006 \\
+					2,918 \\
+				\end{bmatrix}
+			\]
+
+			Semelhantemente ao modelo da letra a), calcularemos inicialmente \((X'X)^{-1}\).
+
+			Definimos primeiramente \((X'X)\) como sendo:
+			\[ (X'X) =
+				\begin{bmatrix}
+					8    & 385    & 58.9   \\
+					385  & 19911  & 2941,4 \\
+					58,9 & 2941,4 & 447,59 \\
+				\end{bmatrix}
+			\]
+
+			Também sabemos que:
+			\[
+				(X'X)^{-1} = \frac{1}{det(X'X)} \times Adj(X'X)
+			\]
+
+			Precisamos calcular agora \(det{X'X}\) e \(Adj(X'X)\)
+
+			O \(det(X'X)\) pode ser calculado da seguinte forma:
+			\begin{align*}
+				det(X'X) & = 71295715,92 + 66700657,10             \\
+				         & + 66700657,10 - 69075440,31             \\
+				         & - 69214671,68 - 66344027,75 =  62890,38
+			\end{align*}
+
+			A matriz \(Adj(X'X)\) é simplesmente a matriz transposta da matriz dos cofatores. Por ser uma matriz simétrica podemos calcular apenas os cofatores da parte triangular superior da matriz, logo:
+			\begin{align*}
+				C_{11} & = -1^{2} \times det
+				\begin{bmatrix}
+					19911  & 2941,4 \\
+					2941,4 & 447,59 \\
+				\end{bmatrix}
+				= 260130,53
+				\\
+				C_{12} & = -1^{3} \times det
+				\begin{bmatrix}
+					385  & 2941,4 \\
+					58.9 & 447,59 \\
+				\end{bmatrix}
+				= 926,31
+				\\
+				C_{13} & = -1^{4} \times det
+				\begin{bmatrix}
+					385  & 19911  \\
+					58,9 & 2941,4 \\
+				\end{bmatrix}
+				= -40318,90
+				\\
+				C_{22} & = -1^{4} \times det
+				\begin{bmatrix}
+					8    & 58,9   \\
+					58,9 & 447,59 \\
+				\end{bmatrix}
+				= 111,51
+				\\
+				C_{23} & = -1^{5} \times det
+				\begin{bmatrix}
+					8    & 385    \\
+					58,9 & 2941,4 \\
+				\end{bmatrix}
+				= -854,7
+				\\
+				C_{33} & = -1^{6} \times det
+				\begin{bmatrix}
+					8   & 385   \\
+					385 & 19911 \\
+				\end{bmatrix}
+				= 11063
+			\end{align*}
+
+			Logo:
+			\[
+				Adj(X'X) =
+				\begin{bmatrix}
+					260130,53 & 926,31 & -40318,90 \\
+					926,31    & 111,51 & -854,7    \\
+					-40318,90 & -854,7 & 11063     \\
+				\end{bmatrix}
+			\]
+
+			Assim, temos:
+			\[
+				(X'X)^{-1} = \frac{1}{62890,38} \times
+				\begin{bmatrix}
+					260130,53 & 926,31 & -40318,90 \\
+					926,31    & 111,51 & -854,7    \\
+					-40318,90 & -854,7 & 11063     \\
+				\end{bmatrix}
+			\]
+
+			Precisamos calcular agora a matriz \(X'Y\):
+			\[
+				X'Y =
+				\begin{bmatrix}
+					23,272   \\
+					1103,398 \\
+					170,1857 \\
+				\end{bmatrix}
+			\]
+
+			Por fim, temos:
+			\[
+				\hat{\beta} = (X'X)^{-1}X'Y =
+				\begin{bmatrix}
+					3,40507  \\
+					-0,01369 \\
+					0,02208  \\
+				\end{bmatrix} =
+				\begin{bmatrix}
+					\hat{\beta_{0}} \\
+					\hat{\beta_{1}} \\
+					\hat{\beta_{2}} \\
+				\end{bmatrix}
+			\]
+
+			Novamente temos uma regressão do tipo \textit{log-lin} com um regressor contínuo, nossa interpretação será de que uma variação em \(X\) provoca uma variação percentual em \(Y\). Logo, temos que: um aumento de R\$ 1.000,00 nos gastos com pares provoca uma \textbf{diminuição} de (\(\beta \times 100\%\)) 1,369\% no preço das ações.
+
+			A diferença observada entre os estimadores da regressão simples e da regressão múltipla é sugestiva da existência de viés na regressão simples.
+
+			Podemos calcular a magnitude do viés da seguinte forma:
+			\[ \gamma_{1} = \widehat{\beta_{1}^{simples}} - \widehat{\beta_{1}^{multipla}} \]
+			\[ \gamma_{1} = -0,01198 - (-0,01369) = 0,00192\]
+
+			Dessa forma também observamos que o valor do estimador de \(\beta_{1}\) estava sobreestimado na regressão simples.
+
+			Faremos agora o teste de hipótese sobre os estimadores encontrados na regressão múltipla (teste t). Nosso teste permanece sendo:
+			\[ t = \frac{\hat{\beta_{1}} - \beta^{H0}_{1}}{\sqrt{\widehat{Var(\beta_{1})}}} \]
+
+			Precisamos agora calcular \(\widehat{Var(\beta_{1}}\). Como já conhecemos \((X'X)^{-1}\), precisamos calcular apenas o valor de \(S^{2}\).
+			\[
+				S^{2} = \frac{SQR}{n - k} \qquad
+				SQR = \sum (Y_{i} - \hat{Y_{i}})^{2}
+			\]
+			\begin{align*}
+				[3,045 - (3,40507 - 0,01369 \times 35 + 0,02208 \times 5,0)]^{2} & = 0,00008 \\
+				[3,157 - (3,40507 - 0,01369 \times 28 + 0,02208 \times 6,2)]^{2} & = 0,00000 \\
+				[2,681 - (3,40507 - 0,01369 \times 60 + 0,02208 \times 9,5)]^{2} & = 0,01264 \\
+				[2,573 - (3,40507 - 0,01369 \times 71 + 0,02208 \times 8,0)]^{2} & = 0,00135 \\
+				[2,996 - (3,40507 - 0,01369 \times 44 + 0,02208 \times 7,9)]^{2} & = 0,00036 \\
+				[2,896 - (3,40507 - 0,01369 \times 45 + 0,02208 \times 7,0)]^{2} & = 0,00226 \\
+				[3,006 - (3,40507 - 0,01369 \times 58 + 0,02208 \times 8,5)]^{2} & = 0,04296 \\
+				[2,918 - (3,40507 - 0,01369 \times 44 + 0,02208 \times 6,8)]^{2} & = 0,00121
+			\end{align*}
+			\[ SQR = 0,06086\]
+			\[ S^{2} = \frac{SQR}{n - k} = \frac{0,06086}{8 - 3} = 0,012172\]
+
+			Com o \(S^{2}\) calculado, precisamos apenas multiplicá-lo pelo valor correspondente na matriz \((X'X)^-1\).
+			\[ \widehat{Var(\beta_{1})} = 0,01272 \times \frac{111,51}{62890,38} = 0,000022\]
+
+			Logo, temos que o teste t é dado por:
+			\[ t = \frac{\hat{\beta_{1}} - \beta_{1}^{H0}}{\sqrt{\widehat{Var(\beta_{1})}}} = \frac{-0,01369 - 0}{\sqrt{0,000022}} = -2,91872\]
+
+			Verificando numa tabela do teste t para o nível de significância de 5\% e com \((n - k) = 5\) graus de liberdade, temos que \(t^{*} = 2,571\)
+
+			Como:
+			\[\lvert -2,91872 \rvert > \lvert 2,571 \rvert\]
+
+			Ainda rejeitamos a hipótese nula ao nível de confiança de 95\%.
+
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+			Sabemos que o \(R^{2}\) é dado por:
+			\[ R^{2} = 1 - \frac{SQR}{SQT} \]
+
+			Como já calculamos o SQR anteriormente, precisamos agora calcular o SQT:
+			\[ SQT = \sum (Y_{i} - \bar{Y})^{2} \]
+			\begin{align*}
+				(Y_{1} - \bar{Y})^{2} & = (3,045 - 2,909)^{2} = 0,01850 \\
+				(Y_{2} - \bar{Y})^{2} & = (3,157 - 2,909)^{2} = 0,06150 \\
+				(Y_{3} - \bar{Y})^{2} & = (2,681 - 2,909)^{2} = 0,05198 \\
+				(Y_{4} - \bar{Y})^{2} & = (2,573 - 2,909)^{2} = 0,11290 \\
+				(Y_{5} - \bar{Y})^{2} & = (2,996 - 2,909)^{2} = 0,00757 \\
+				(Y_{6} - \bar{Y})^{2} & = (2,896 - 2,909)^{2} = 0,00017 \\
+				(Y_{7} - \bar{Y})^{2} & = (3,006 - 2,909)^{2} = 0,00941 \\
+			\end{align*}
+			\[ SQT = 0,26211 \]
+
+			Logo:
+			\[ R^{2} = 1 - \frac{SQR}{SQT} = 1 - \frac{0,06086}{0,26211} = 0,76781\]
+
+			Semelhantemente:
+			\[ \bar{R^{2}} = 1 - \frac{SQR}{SQT} \times \frac{n - 1}{n - k} = 1 - \frac{0,06086}{0,26211} \times \frac{7}{5} = 0,67493\]
+
+			Para comprar modelos com quantidades distintas de estimadores, devemos fazer uso do \(\bar{R^{2}}\). Como:
+			\[ 0,71682 > 0,67493 \]
+
+			O modelo da letra a) se ajusta melhor aos dados do que o modelo obtido na letra d).
+
+			Vimos que existem evidências de viés no modelo da letra a), de forma que é possível que a hipótese de endogeneidade tenha sido violada. Assim, sem analisar o comportamento de \(\bar{R^{2}}\), pensaríamos que o modelo da letra d) se ajustaria melhor aos dados do que o modelo da letra a), porém observamos o contrário quando utilizamos o \(\bar{R^{2}}\) para comparar a qualidade do ajuste dos modelos.
+
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+			Para termos certeza, precisamos analisar o VIF. O VIF é dado por:
+			\[ VIF = \frac{1}{1 - R^{2}_{j}} \]
+
+			Dessa forma, desenvolveremos a seguinte regressão auxiliar:
+			\[ GastoDosPares = \alpha_{0} + \alpha_{1} \times HabilidadeDoCFO \]
+
+			Para tanto temos os seguintes dados:
+
+			\vspace{0.2cm}
+
+			\begin{center}
+				\begin{tblr}{
+						colspec = {l r}, % Utiliza os especificadores tradicionais
+					}
+					\toprule\toprule % Linha dupla no topo
+					{Gastos dos \\ pares} & {Habilidade \\ do CFO} \\
+					\midrule         % Linha divisória do cabeçalho
+					35 & 5,0    \\
+					28 & 6,2    \\
+					60 & 9,5    \\
+					71 & 8,0    \\
+					44 & 7,9    \\
+					45 & 7,0    \\
+					58 & 8,5    \\
+					44 & 6,8    \\
+					\bottomrule      % Linha de fechamento na base
+				\end{tblr}
+			\end{center}
+
+			\vspace{0.2cm}
+
+			O modelo a ser determinado é dado por \((X'X)^{-1}X'Y\).
+
+			Temos, então:
+			\[
+				X =
+				\begin{bmatrix}
+					1 & 5,0 \\
+					1 & 6,2 \\
+					1 & 9,5 \\
+					1 & 8,0 \\
+					1 & 7,9 \\
+					1 & 7,0 \\
+					1 & 8,5 \\
+					1 & 6,8 \\
+				\end{bmatrix} \qquad
+				X' =
+				\begin{bmatrix}
+					1   & 1   & 1   & 1   & 1   & 1   & 1   & 1   \\
+					5,0 & 6,2 & 9,5 & 8,0 & 7,9 & 7,0 & 8,5 & 6,8 \\
+				\end{bmatrix} \qquad
+				Y =
+				\begin{bmatrix}
+					35 \\
+					28 \\
+					60 \\
+					71 \\
+					44 \\
+					45 \\
+					58 \\
+					44 \\
+				\end{bmatrix}
+			\]
+
+			Logo,
+			\[
+				(X'X) =
+				\begin{bmatrix}
+					8    & 58,9   \\
+					58,9 & 447,59 \\
+				\end{bmatrix}
+			\]
+
+			\begin{myalert}{ATENÇÃO}
+				Estes valores já apareciam na matriz \((X'X)\) calculada na regressão múltipla. Verifique!
+			\end{myalert}
+
+			Assim, podemos escrever o seguinte:
+			\[
+				(X'X)^{-1} = \frac{1}{111,51}
+				\begin{bmatrix}
+					447,59 & -58,9 \\
+					-58,9  & 8     \\
+				\end{bmatrix}
+			\]
+
+			Também podemos escrever o seguinte:
+			\[
+				X'Y =
+				\begin{bmatrix}
+					385     \\
+					2941,40 \\
+				\end{bmatrix}
+			\]
+
+			\begin{myalert}{ATENÇÃO}
+				Estes valores também já apareciam na matriz \((X'X)\) calculada na regressão múltipla. Verifique!
+			\end{myalert}
+
+			Por fim, escrevemos:
+			\[
+				\hat{\beta} = (X'X)^{-1}X'Y =
+				\begin{bmatrix}
+					-8,30697 \\
+					7,66478  \\
+				\end{bmatrix}
+			\]
+
+			Para calcularmos \(R^{2}_{j}\), precisamos calcular o SQR e SQT desta regressão:
+			\[ SQR = \sum (Y_{i} - \hat{Y_{i}})^{2} \]
+			\begin{align*}
+				[35 - (-8,30697 + 7,66478 \times 5,0)]^{2} & = 24,83099  \\
+				[28 - (-8,30697 + 7,66478 \times 6,2)]^{2} & = 125,76873 \\
+				[60 - (-8,30697 + 7,66478 \times 9,5)]^{2} & = 20,32603  \\
+				[71 - (-8,30697 + 7,66478 \times 8,0)]^{2} & = 323,59441 \\
+				[44 - (-8,30697 + 7,66478 \times 7,9)]^{2} & = 67,97660  \\
+				[45 - (-8,30697 + 7,66478 \times 7,0)]^{2} & = 0,12006   \\
+				[58 - (-8,30697 + 7,66478 \times 8,5)]^{2} & = 1,33712   \\
+				[44 - (-8,30697 + 7,66478 \times 6,8)]^{2} & = 0,03477
+			\end{align*}
+			\[ SQR = 563,98864\]
+
+			\[ SQT = \sum (Y_{i} - \bar{Y})^{2}\]
+			\begin{align*}
+				(35 - 48,125)^{2} & = 172,26562 \\
+				(28 - 48,125)^{2} & = 405,01562 \\
+				(60 - 48,125)^{2} & = 141,01562 \\
+				(71 - 48,125)^{2} & = 523,26562 \\
+				(44 - 48,125)^{2} & = 17,01562  \\
+				(45 - 48,125)^{2} & = 9,76562   \\
+				(58 - 48,125)^{2} & = 97,51562  \\
+				(44 - 48,125)^{2} & = 17,01562  \\
+			\end{align*}
+			\[ SQT = 1382,87496\]
+
+			Assim:
+			\[ R^{2}_{j} = 1 - \frac{563,98864}{1382,87496} = 0,59216\]
+
+			Como
+			\begin{align*}
+				VIF & = \frac{1}{1 - R^{2}_{j}} \\
+				VIF & = \frac{1}{1 - 0,59216}   \\
+				VIF & = 2,45194
+			\end{align*}
+
+			Como \(VIF < 5\), não existem suspeitas de multicolinearidade.
+
+			No caso acima fizemos a seguinte regressão:
+			\[ GastoDosPares = \alpha_{0} + \alpha_{1} \times HabilidadeDoCFO \]
+
+			Poderíamos ter feito também a regressão:
+			\[ HabilidadeDoCFO = \alpha_{0} + \alpha_{1} \times GastoDosPares\]
+
+			Desta forma aproveitaríamos a matrix \((X'X)^{-1}\) do exemplo da letra a)
+			\[
+				(X'X)^{-1} = \frac{1}{11063}
+				\begin{bmatrix}
+					19911 & -385 \\
+					-385  & 8    \\
+				\end{bmatrix}
+			\]
+
+			Precisaríamos agora calcular a matriz \(X'Y\)
+			\[
+				X' =
+				\begin{bmatrix}
+					1  & 1  & 1  & 1  & 1  & 1  & 1  & 1  \\
+					35 & 28 & 60 & 71 & 44 & 45 & 58 & 44 \\
+				\end{bmatrix} \quad
+				Y =
+				\begin{bmatrix}
+					5,0 \\
+					6,2 \\
+					9,5 \\
+					8,0 \\
+					7,9 \\
+					7,0 \\
+					8,5 \\
+					6,8 \\
+				\end{bmatrix}
+			\]
+
+			\[
+				X'Y =
+				\begin{bmatrix}
+					58,9   \\
+					2941,4 \\
+				\end{bmatrix}
+			\]
+
+			Logo:
+			\[
+				(X'X)^{-1}X'Y =
+				\begin{bmatrix}
+					3,64436 \\
+					0,07726 \\
+				\end{bmatrix}
+			\]
+
+			Para calcularmos \(R^{2}_{j}\), precisamos calcular o SQR e SQT desta regressão:
+			\[ SQR = \sum (Y_{i} - \hat{Y_{i}})^{2} \]
+			\begin{align*}
+				[5,0 - (3,64436 + 0,07726 \times 35)]^{2} & = 1,81834 \\
+				[6,2 - (3,64436 + 0,07726 \times 28)]^{2} & = 0,15395 \\
+				[9,5 - (3,64436 + 0,07726 \times 60)]^{2} & = 1,48850 \\
+				[8,0 - (3,64436 + 0,07726 \times 71)]^{2} & = 1,27649 \\
+				[7,9 - (3,64436 + 0,07726 \times 44)]^{2} & = 0,73308 \\
+				[7,0 - (3,64436 + 0,07726 \times 45)]^{2} & = 0,01466 \\
+				[8,5 - (3,64436 + 0,07726 \times 58)]^{2} & = 0,14030 \\
+				[6,8 - (3,64436 + 0,07726 \times 44)]^{2} & = 0,05944
+			\end{align*}
+			\[ SQR = 5,68476\]
+
+			\[ SQT = \sum (Y_{i} - \bar{Y})^{2}\]
+			\begin{align*}
+				(5,0 - 7,3625)^{2} & = 5,58141 \\
+				(6,2 - 7,3625)^{2} & = 1,35141 \\
+				(9,5 - 7,3625)^{2} & = 4,56891 \\
+				(8,0 - 7,3625)^{2} & = 0,40641 \\
+				(7,9 - 7,3625)^{2} & = 0,28891 \\
+				(7,0 - 7,3625)^{2} & = 0,13141 \\
+				(8,5 - 7,3625)^{2} & = 1,29391 \\
+				(6,8 - 7,3625)^{2} & = 0,31641 \\
+			\end{align*}
+			\[ SQT = 13,93878\]
+
+			Assim:
+			\[ R^{2}_{j} = 1 - \frac{5,68476}{13,93878} = 0,59216\]
+
+			Como
+			\begin{align*}
+				VIF & = \frac{1}{1 - R^{2}_{j}} \\
+				VIF & = \frac{1}{1 - 0,59216}   \\
+				VIF & = 2,45194
+			\end{align*}
+
+			Que é  o mesmo VIF obtido anteriormente.
+
+			\begin{myalert}{ATENÇÃO}
+				Isto só pode ser feito pois o número de variáveis independentes é igual a 2. Caso tivéssemos mais variáveis precisaríamos calcular cada um dos VIF separadamente.
+			\end{myalert}
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+			\begin{myalert}{ATENÇÃO}
+				Este assunto não foi abordado pelo professor em sala de aula!
+			\end{myalert}
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+			Desejamos encontrar os estimadores do seguinte modelo:
+			\[ln(preco) = \gamma_{0} + \gamma_{1} \times ln(gastos) + \gamma_{2} \times habilidade + u\]
+
+			Partimos do seguinte conjunto de dados:
+
+			\vspace{0.2cm}
+
+			\begin{center}
+				\begin{tblr}{
+						colspec = {l c c c r}, % Utiliza os especificadores tradicionais
+					}
+					\toprule\toprule % Linha dupla no topo
+					{Preço da                       \\ Ação} & {ln(Preço da \\ Ação)} & {Gastos dos \\ pares} & {ln(Gastos \\ dos pares)} & {Habilidade \\ do CFO} \\
+					\midrule         % Linha divisória do cabeçalho
+					21,0 & 3,045 & 35 & 3,555 & 5,0 \\
+					23,5 & 3,157 & 28 & 3,332 & 6,2 \\
+					14,6 & 2,681 & 60 & 4,094 & 9,5 \\
+					13,1 & 2,573 & 71 & 4,263 & 8,0 \\
+					20,0 & 2,996 & 44 & 3,784 & 7,9 \\
+					18,1 & 2,896 & 45 & 3,807 & 7,0 \\
+					20,2 & 3,006 & 58 & 4,060 & 8,5 \\
+					18,5 & 2,918 & 44 & 3,784 & 6,8 \\
+					\bottomrule      % Linha de fechamento na base
+				\end{tblr}
+			\end{center}
+
+			\vspace{0.2cm}
+
+			Assim, temos as seguintes matrizes:
+			\[
+				X =
+				\begin{bmatrix}
+					1 & 3,555 & 5,0 \\
+					1 & 3,332 & 6,2 \\
+					1 & 4,094 & 9,5 \\
+					1 & 4,263 & 8,0 \\
+					1 & 3,784 & 7,9 \\
+					1 & 3,807 & 7,0 \\
+					1 & 4,060 & 8,5 \\
+					1 & 3,784 & 6,8 \\
+				\end{bmatrix} \qquad
+				Y =
+				\begin{bmatrix}
+					3,045 \\
+					3,157 \\
+					2,681 \\
+					2,573 \\
+					2,996 \\
+					2,896 \\
+					3,006 \\
+					2,918 \\
+				\end{bmatrix}
+			\]
+			\[
+				X' =
+				\begin{bmatrix}
+					1     & 1     & 1     & 1     & 1     & 1     & 1     & 1     \\
+					3,555 & 3,332 & 4,094 & 4,263 & 3,784 & 3,807 & 4,060 & 3,784 \\
+					5,0   & 6,2   & 9,5   & 8,0   & 7,9   & 7,0   & 8,5   & 6,8   \\
+				\end{bmatrix}
+			\]
+
+			Podemos calcular os estimadores deste modelo da seguinte forma:
+			\[\hat{\beta} = (X'X)^{-1}X'Y\]
+
+			Calculando \((X'X)^{-1}\), primeiro precisamos obter:
+			\[
+				(X'X) =
+				\begin{bmatrix}
+					8      & 30,679    & 58,9     \\
+					30,679 & 118,28842 & 228,2142 \\
+					58,9   & 228,2142  & 447,59   \\
+				\end{bmatrix}
+			\]
+
+			Calcularemos agora \(det(X'X)\) e \(Adj(X'X)\):
+			\begin{align*}
+				det(X'X) & = 423557,71126 + 412381,48472            \\
+				         & + 412381,48472 - 410367,36955            \\
+				         & - 416653,76865 - 421272,17394 = 27,36854
+			\end{align*}
+
+			A matriz \(Adj(X'X)\) é dada pela matriz transposta de seus cofatores:
+			\begin{align*}
+				C_{11} & = -1^{2} \times det
+				\begin{bmatrix}
+					118,28842 & 228,2142 \\
+					228,2142  & 447,59   \\
+				\end{bmatrix}
+				= 862,99283
+				\\
+				C_{12} & = -1^{3} \times det
+				\begin{bmatrix}
+					30,679 & 228,2142 \\
+					58,9   & 447,59   \\
+				\end{bmatrix}
+				= -289,79723
+				\\
+				C_{13} & = -1^{4} \times det
+				\begin{bmatrix}
+					30,679 & 118,28842 \\
+					58,9   & 228,2142  \\
+				\end{bmatrix}
+				= 34,19550
+				\\
+				C_{22} & = -1^{4} \times det
+				\begin{bmatrix}
+					8    & 58,9   \\
+					58,9 & 447,59 \\
+				\end{bmatrix}
+				= 111,51
+				\\
+				C_{23} & = -1^{5} \times det
+				\begin{bmatrix}
+					8    & 30,679   \\
+					58,9 & 228,2142 \\
+				\end{bmatrix}
+				= -18,7202
+				\\
+				C_{33} & = -1^{6} \times det
+				\begin{bmatrix}
+					8      & 30,679    \\
+					30,679 & 118,28842 \\
+				\end{bmatrix}
+				= 5,10632
+			\end{align*}
 
 			Portanto:
 			\[
-				S^{2} = \frac{0,30197}{10-2} = \frac{0,30197}{8} = 0,03775 \quad
-				\hat{\sigma^2}= \frac{0,30197}{10} = 0,03020
-			\]
-
-			Entretanto, vamos preferir utilizar \(S^{2}\) como estimador da variância do erro, pois ele é um estimador não viesado.
-
-		\end{solution}
-
-		\vspace{0.3cm}
-
-		\part
-
-		\begin{solution}
-
-			Para calcularmos a variância e covariância das variáveis em questão podemos utilizar uma abordagem matricial. A matriz de variância-covariância dos estimadores é dada por:
-			\[VarCov = S^2 \times (X'X)^{-1}\]
-			Como já obtivemos \(S^2\) na questão anterior, precisamos apenas calcular \((X'X)^{-1}\).
-
-			\[(X'X) = \begin{bmatrix}
-					n      & \sum X     \\
-					\sum X & \sum X^{2}
-				\end{bmatrix}
-			\]
-
-			E, portanto:
-			\[(X'X)^{-1} = \frac{1}{n\sum X^{2} - (\sum X)^{2}} \times \begin{bmatrix}
-					\sum X^{2} & -\sum X \\
-					-\sum X    & n
-				\end{bmatrix}
-			\]
-
-			Logo, temos que:
-			\[
-				VarCov = S^2 \times (X'X)^{-1} = 0,03775 \times \frac{1}{10 \times 7709 - (273)^{2}} \times
+				(X'X)^{-1} = \frac{1}{27,36854}
 				\begin{bmatrix}
-					7709 & -273 \\
-					-273 & 10
+					862,99283  & -289,79723 & 34,19550 \\
+					-289,79723 & 111,51     & -18,7202 \\
+					34,19550   & -18,7202   & 5,10632  \\
 				\end{bmatrix}
 			\]
+
+			Também precisamos determinar \(X'Y\):
 			\[
-				VarCov =
+				X'Y =
 				\begin{bmatrix}
-					0,11363  & -0,00402 \\
-					-0,00402 & 0,00015
+					23,272   \\
+					88,89682 \\
+					170,1857 \\
 				\end{bmatrix}
 			\]
 
-			Por fim, temos que:
-			\[Var(\hat{\beta_{0}}) = 0,11363\]
-			\[Var(\hat{\beta_{1}}) = 0,00015\]
+			Finalmente podemos obter nossos estimadores:
+			\[
+				\hat{\beta} = (X'X)^{-1}X'Y =
+				\begin{bmatrix}
+					5,15565  \\
+					-0,62985 \\
+					0,02292  \\
+				\end{bmatrix} =
+				\begin{bmatrix}
+					\hat{\beta_{0}} \\
+					\hat{\beta_{1}} \\
+					\hat{\beta_{2}} \\
+				\end{bmatrix}
+			\]
+
+			O estimador \(\gamma_{1}\) agora está definido numa regressão \textit{log-log} e é um regressor contínuo, portanto nossa interpretação é de que: um aumento de 1\% nos gastos dos pares, provoca uma diminuição de (\(\beta\%\)) 0,62985\% no preço das ações.
+
+			Sabemos que o teste t, neste caso, é dado por \(\frac{\hat{\beta_{1}} - \beta^{H0}_{1}}{\sqrt{\widehat{Var(\beta_{1})}}}\), e que \(\beta^{H0}_{1} = 0\).
+
+			Precisamos calcular, portanto, \(\widehat{Var(\beta_{1}})\). Para isso utilizaremos a matriz de variância-covariância. Precisamos, então, calcular o valor de \(S^{2}\).
+
+			\[
+				S^{2} = \frac{SQR}{n - k} \qquad
+				SQR = \sum (Y - \hat{Y})^{2}
+			\]
+			\begin{align*}
+				[3.045 - (5,15565 - 0,62985 \times 3,555 + 0,02292 \times 5,0 )]^{2} & = 0,00019 \\
+				[3,157 - (5,15565 - 0,62985 \times 3,332 + 0,02292 \times 6,2 )]^{2} & = 0,00177 \\
+				[2,681 - (5,15565 - 0,62985 \times 4,094 + 0,02292 \times 9,5 )]^{2} & = 0,01295 \\
+				[2,573 - (5,15565 - 0,62985 \times 4,263 + 0,02292 \times 8,0 )]^{2} & = 0,00655 \\
+				[2,996 - (5,15565 - 0,62985 \times 3,784 + 0,02292 \times 7,9 )]^{2} & = 0,00182 \\
+				[2,896 - (5,15565 - 0,62985 \times 3,807 + 0,02292 \times 7,0 )]^{2} & = 0,00050 \\
+				[3,006 - (5,15565 - 0,62985 \times 4,060 + 0,02292 \times 8,5 )]^{2} & = 0,04525 \\
+				[2,918 - (5,15565 - 0,62985 \times 3,784 + 0,02292 \times 6,8 )]^{2} & = 0,00010 \\
+			\end{align*}
+			\[ SQR = 0,06913 \]
+			\[ S^{2} = \frac{SQR}{n - k} = \frac{0,06913}{8 - 3} = 0,01383 \]
+
+			Sabemos também que:
+			\[
+				(X'X)^{-1} = \frac{1}{27,36854}
+				\begin{bmatrix}
+					862,99283  & -289,79723 & 34,19550 \\
+					-289,79723 & 111,51     & -18,7202 \\
+					34,19550   & -18,7202   & 5,10632  \\
+				\end{bmatrix}
+			\]
+
+			E sabemos que a matriz de variância-covariância é dada por \(VarCov = S^{2}(X'X)^{-1}\).
+
+			Portanto, utilizando o valor apropriado da matriz de variância-covariância, temos que o valor de \(\widehat{Var(\beta_{1})}\) é:
+			\[ \widehat{Var(\beta_{1})} = 0,01383 \times \frac{111,51}{27,36854} = 0,05635 \]
+
+			Logo, o valor do teste t é dado por:
+			\[ t = \frac{-0,62985}{\sqrt{0,05635}} = -2,65332 \]
+
+			Verificando numa tabela do teste t para o nível de significância de 10\% e com \((n - k) = 5\) graus de liberdade, temos que:
+			\[ t^{*} = 2,015 \]
+
+			Como:
+			\[\lvert -2,65332 \rvert > \lvert 2,015 \rvert\]
+
+			Rejeitamos a hipótese nula ao nível de confiança de 90\%.
 
 		\end{solution}
 
-		\vspace{0.3cm}
-
-		\part
-
-		\begin{solution}
-
-			A hipótese que garante o não-viés dos estimadores é a hipótese de exogeneidade (H1), que diz que \(E(u|X) = 0\).
-
-		\end{solution}
-
-		\vspace{0.3cm}
-
-		\part
-
-		\begin{solution}
-
-			A variância de \(Var(\hat{\beta_{0}} + \hat{\beta_{1}})\) é dada por:
-
-			\[Var(\hat{\beta_{0}} + \hat{\beta_{1}}) = Var(\hat{\beta_{0}}) + Var(\hat{\beta_{1}}) + 2 \times Cov(\hat{\beta_{0}} \hat{\beta_{1}})\]
-			Da letra C temos que:
-			\[Var(\hat{\beta_{0}} + \hat{\beta_{1}}) = 0,11363 + 0,00015 + 2 \times (-0,00402)\]
-			\[Var(\hat{\beta_{0}} + \hat{\beta_{1}}) = 0,10574\]
-
-		\end{solution}
-
-		\vspace{0.3cm}
-
-		\part
-
-		\begin{solution}
-
-			Sabemos que \(R^{2}\) é dado por:
-			\[ R^{2} = 1 - \frac{SQR}{SQT} \]
-
-			E da letra b temos que \(SQR = 0,30197\). Agora precisamos calcular \(SQT\).
-
-			\[SQT = \sum (Y-\bar{Y})^{2}\]
-			\[ (3,0 - 3,41)^{2} =  0,1681 \]
-			\[ (3,5 - 3,41)^{2} =  0,0081 \]
-			\[ (3,6 - 3,41)^{2} =  0,0361 \]
-			\[ (3,1 - 3,41)^{2} =  0,0961 \]
-			\[ (3,3 - 3,41)^{2} =  0,0121 \]
-			\[ (3,8 - 3,41)^{2} =  0,1521 \]
-			\[ (4,0 - 3,41)^{2} =  0,3481 \]
-			\[ (3,1 - 3,41)^{2} =  0,0961 \]
-			\[ (3,2 - 3,41)^{2} =  0,0441 \]
-			\[ (3,5 - 3,41)^{2} =  0,0081 \]
-			\[SQT = 0,9690\]
-
-			Portanto: \text{\large\( R^{2} = 1 - \frac{0,30197}{0,9690} = 0,68837\)}
-
-		\end{solution}
-
-		\vspace{0.3cm}
-
-		\part
-
-		\begin{solution}
-
-			O modelo calculado foi:
-			\[ retorno_{i} = 2,01688 + 0,05103 \times BTD_{i} + u_{i} \]
-
-			Substituindo o valor apropriado de BTD, temos:
-			\[ retorno_{i} = 2,01688 + 0,05103 \times 29 = 3,49675 \]
-
-		\end{solution}
 	\end{parts}
 
-	\question Conforme Exercício 2
+	\question Conforme Exercício 3
 
 	\begin{parts}
 
 		\part
 
 		\begin{solution}
+			Precisamos, inicialmente, identificar quais dados serão utilizados na nossa regressão.
+
+			\vspace{0.2cm}
 
 			\begin{center}
-				\begin{tabular}{|c|c|}
-					\hline
-					Preço (Y) & Receita Líquida (X) \\ \hline
-					10        & 25                  \\ \hline
-					15        & 30                  \\ \hline
-					30        & 35                  \\ \hline
-					16        & 28                  \\ \hline
-					20        & 25                  \\ \hline
-					12        & 25                  \\ \hline
-				\end{tabular}
+				\begin{tblr}{
+						colspec = {l r}, % Utiliza os especificadores tradicionais
+					}
+					\toprule\toprule % Linha dupla no topo
+					{Preço da      \\ Ação} & {Empresa de \\ grande porte} \\
+					\midrule         % Linha divisória do cabeçalho
+					21,0 & sim (0) \\
+					23,5 & sim (0) \\
+					14,6 & não (1) \\
+					13,1 & não (1) \\
+					20,0 & sim (0) \\
+					18,1 & não (1) \\
+					20,2 & sim (0) \\
+					18,5 & sim (0) \\
+					\bottomrule      % Linha de fechamento na base
+				\end{tblr}
 			\end{center}
 
-			Utilizaremos uma abordagem matricial para derivar os estimadores de MQO. As matrizes \(X\) e \(Y\) são dadas por:
+			\vspace{0.2cm}
+
+			Como a variável \enquote{Empresa de grande porte} é uma variável binária, podemos fazer uso dos valores das médias.
+			\begin{align*}
+				\hat{\beta_{0}} & = \frac{21,0 + 23,5 + 20,0 + 20,2 + 18,5}{5} = 20,64        \\
+				\hat{\beta_{1}} & = \frac{14,6 + 13,1 + 18,1}{3} - \hat{\beta_{1}} = -5,37333
+			\end{align*}
+
+			Vemos que, em média, o preço das ações das empresas de grande porte é 5,37333 maior que as outras empresas.
+
+			Sabemos que o teste t, neste caso, é dado por \(\frac{\hat{\beta_{1}} - \beta^{H0}_{1}}{\sqrt{\frac{S^{2}}{\sum (X_{i} - \bar{X})^{2}}}}\), e que \(\beta^{H0}_{1} = 0\).
+
+			Precisamos calcular, portanto, \(S^{2}\) e \(\sum (X_{i} - \bar{X})^{2}\).
+			\[
+				S^{2} = \frac{SQR}{n - k} \qquad
+				SQR = \sum (Y - \hat{Y})^{2}
+			\]
+			\begin{align*}
+				[21,0 - (20,64 - (-5,37333 \times 0))]^{2} & = 0,1296  \\
+				[23,5 - (20,64 - (-5,37333 \times 0))]^{2} & = 8,1796  \\
+				[14,6 - (20,64 - (-5,37333 \times 1))]^{2} & = 0,44445 \\
+				[13,1 - (20,64 - (-5,37333 \times 1))]^{2} & = 4,69446 \\
+				[20,0 - (20,64 - (-5,37333 \times 0))]^{2} & = 0,4096  \\
+				[18,1 - (20,64 - (-5,37333 \times 1))]^{2} & = 8,02776 \\
+				[20,2 - (20,64 - (-5,37333 \times 0))]^{2} & = 0,1936  \\
+				[18,5 - (20,64 - (-5,37333 \times 0))]^{2} & = 4,5796
+			\end{align*}
+			\[ SQR = 26,65867 \]
+			\[ S^{2} = \frac{SQR}{n - k} = \frac{26,65867}{8 - 2} = 4,44311 \]
+
+			\[ \sum (X_{i} - \bar{X})^{2} \]
+			\begin{align*}
+				(0 - 0,375)^{2} & = 0,14062 \\
+				(0 - 0,375)^{2} & = 0,14062 \\
+				(1 - 0,375)^{2} & = 0,39062 \\
+				(1 - 0,375)^{2} & = 0,39062 \\
+				(0 - 0,375)^{2} & = 0,14062 \\
+				(1 - 0,375)^{2} & = 0,39062 \\
+				(0 - 0,375)^{2} & = 0,14062 \\
+				(0 - 0,375)^{2} & = 0,14062
+			\end{align*}
+			\[ \sum (X_{i} - \bar{X})^{2} = 1,87496\]
+
+			Logo, nosso teste t é igual a:
+			\begin{align*}
+				t & = \frac{\hat{\beta_{1}} - \beta^{H0}_{1}}{\sqrt{\frac{S^{2}}{\sum (X_{i} - \bar{X})^{2}}}} \\
+				t & = \frac{-5,37333}{\sqrt{\frac{4,44311}{1,87496}}}                                          \\
+				t & = -3,49057                                                                                 \\
+			\end{align*}
+
+			Verificando numa tabela do teste t para o nível de significância de 5\% e com \((n - k) = 6\) graus de liberdade, temos que:
+			\[ t^{*} = 2,447 \]
+
+			Como:
+			\[\lvert -3,49057 \rvert > \lvert 2,447 \rvert\]
+
+			Rejeitamos a hipótese nula ao nível de confiança de 95\%.
+
+			Como temos uma regressão simples, podemos calcular o teste F da seguinte forma:
+			\[ F \approx t^{2} \]
+
+			Portanto:
+			\[ F \approx (-3,49057)^{2} = 12,18408 \]
+
+			Verificando numa tabela do teste F para o nível de significância de 5\% e com \((n - k) = 6\) graus de liberdade no denominador, temos que:
+			\[ F_{1,6} = F^{*} = 5,99 \]
+
+			Como:
+			\[\lvert 12,18408 \rvert > \lvert 5,99 \rvert\]
+
+			Rejeitamos a hipótese nula ao nível de confiança de 95\%.
+
+		\end{solution}
+
+		\vspace{0.3cm}
+
+		\part
+
+		\begin{solution}
+			Para avaliarmos se existe uma evolução diferente no preço das ações em função do gasto dos pares, podemos adotar um modelo de \textit{dummy de interação}. Ou seja, construiremos o seguinte modelo:
+			\[ PrecoAcoes = \beta_{0} + \beta_{1} \times GrandePorte \cdot GastoPares + \beta_{2} \times GastoPares\]
+
+			\begin{equation*}
+				\begin{cases}
+					PrecoAcoes & = \beta_{0} + \beta_{2} \times GastoPares, \text{quando for empresa de grande porte}                   \\
+					PrecoAcoes & = \beta_{0} + (\beta_{1} + \beta_{2}) \times GastoPares, \text{quando não for empresa de grande porte}
+				\end{cases}
+			\end{equation*}
+
+			Precisamos agora definir os dados a serem utilizados nesta regressão:
+
+			\vspace{0.2cm}
+
+			\begin{center}
+				\begin{tblr}{
+						colspec = {l r}, % Utiliza os especificadores tradicionais
+					}
+					\toprule\toprule % Linha dupla no topo
+					{Preço da                \\ Ação} & {Empresa de \\ grande porte} & {Gastos dos \\ pares} & \(X_{1} \times X_{2}\)\\
+					\midrule         % Linha divisória do cabeçalho
+					21,0 & sim (0) & 35 & 0  \\
+					23,5 & sim (0) & 28 & 0  \\
+					14,6 & não (1) & 60 & 60 \\
+					13,1 & não (1) & 71 & 71 \\
+					20,0 & sim (0) & 44 & 0  \\
+					18,1 & não (1) & 45 & 45 \\
+					20,2 & sim (0) & 58 & 0  \\
+					18,5 & sim (0) & 44 & 0  \\
+					\bottomrule      % Linha de fechamento na base
+				\end{tblr}
+			\end{center}
+
+			\vspace{0.2cm}
+
+			Como nosso modelo é o seguinte:
+			\[ PrecoAcoes = \beta_{0} + \beta_{1} \times GrandePorte \cdot GastoPares + \beta_{2} \times GastoPares\]
+
+			Podemos escrever as seguintes matrizes relevantes:
 			\[ X =
 				\begin{bmatrix}
-					1 & 25 \\
-					1 & 30 \\
-					1 & 35 \\
-					1 & 28 \\
-					1 & 25 \\
-					1 & 25
-				\end{bmatrix} \quad
-				Y =
-				\begin{bmatrix}
-					10 \\
-					15 \\
-					30 \\
-					16 \\
-					20 \\
-					12
-				\end{bmatrix}
-			\]
-
-			Também podemos escrever a matriz \(X'\) da seguinte forma:
-			\[
+					1 & 0  & 35 \\
+					1 & 0  & 28 \\
+					1 & 60 & 60 \\
+					1 & 71 & 71 \\
+					1 & 0  & 44 \\
+					1 & 45 & 45 \\
+					1 & 0  & 58 \\
+					1 & 0  & 44 \\
+				\end{bmatrix} \qquad
 				X' =
 				\begin{bmatrix}
-					1  & 1  & 1  & 1  & 1  & 1  \\
-					25 & 30 & 35 & 28 & 25 & 25
+					1  & 1  & 1  & 1  & 1  & 1  & 1  & 1  \\
+					0  & 0  & 60 & 71 & 0  & 45 & 0  & 0  \\
+					35 & 28 & 60 & 71 & 44 & 45 & 58 & 44 \\
 				\end{bmatrix}
 			\]
-
-			Logo, multiplicando \(X'\) por \(X\), obtemos:
 			\[
-				X'X =
+				Y =
 				\begin{bmatrix}
-					6   & 168  \\
-					168 & 4784
+					21,0 \\
+					23,5 \\
+					14,6 \\
+					13,1 \\
+					20,0 \\
+					18,1 \\
+					20,2 \\
+					18,5 \\
 				\end{bmatrix}
 			\]
 
-			Invertendo a matriz \(X'X\) obtemos:
+			Podemos calcular os estimadores deste modelo da seguinte forma:
+			\[\hat{\beta} = (X'X)^{-1}X'Y\]
+
+			Calculando \((X'X)^{-1}\), primeiro precisamos obter:
 			\[
-				(X'X)^{-1} =
-				\frac{1}{6 \times 4784 - 168^2} \times \begin{bmatrix}
-					4784 & -168 \\
-					-168 & 6
+				(X'X) =
+				\begin{bmatrix}
+					8   & 176   & 385   \\
+					176 & 10666 & 10666 \\
+					385 & 10666 & 19911 \\
 				\end{bmatrix}
 			\]
 
-			Podemos também obter a matriz \(X'Y\), que é dada por:
+			Calcularemos agora \(det(X'X)\) e \(Adj(X'X)\):
+			\begin{align*}
+				det(X'X) & = 1698965808 + 722728160           \\
+				         & + 722728160 - 1580967850           \\
+				         & - 910108448 - 616763136 = 36582694
+			\end{align*}
+
+			A matriz \(Adj(X'X)\) é dada pela matriz transposta de seus cofatores:
+			\begin{align*}
+				C_{11} & = -1^{2} \times det
+				\begin{bmatrix}
+					10666 & 10666 \\
+					10666 & 19911 \\
+				\end{bmatrix}
+				= 98607170
+				\\
+				C_{12} & = -1^{3} \times det
+				\begin{bmatrix}
+					176 & 10666 \\
+					385 & 19911 \\
+				\end{bmatrix}
+				= 602074
+				\\
+				C_{13} & = -1^{4} \times det
+				\begin{bmatrix}
+					176 & 10666 \\
+					385 & 10666 \\
+				\end{bmatrix}
+				= -2229194
+				\\
+				C_{22} & = -1^{4} \times det
+				\begin{bmatrix}
+					8   & 385   \\
+					385 & 19911 \\
+				\end{bmatrix}
+				= 11063
+				\\
+				C_{23} & = -1^{5} \times det
+				\begin{bmatrix}
+					8   & 176   \\
+					385 & 10666 \\
+				\end{bmatrix}
+				= -17658
+				\\
+				C_{33} & = -1^{6} \times det
+				\begin{bmatrix}
+					8   & 176   \\
+					176 & 10666 \\
+				\end{bmatrix}
+				= 54352
+			\end{align*}
+
+			Portanto:
+			\[
+				(X'X)^{-1} = \frac{1}{36582694}
+				\begin{bmatrix}
+					98607170 & 602074 & -2229194 \\
+					602074   & 11063  & -17658   \\
+					-2229194 & -17658 & 54352    \\
+				\end{bmatrix}
+			\]
+
+			Também precisamos determinar \(X'Y\):
 			\[
 				X'Y =
 				\begin{bmatrix}
-					103 \\
-					2998
+					149    \\
+					2620,6 \\
+					6879,2 \\
 				\end{bmatrix}
 			\]
 
-			Por fim, obtemos o produto de \((X'X)^{-1}\) por \(X'Y\):
+			Finalmente podemos obter nossos estimadores:
 			\[
-				(X'X)^{-1}X'Y = \hat{\beta} =
-				\frac{1}{6 \times 4784 - 168^2} \times \begin{bmatrix}
-					-10912 \\
-					684
-				\end{bmatrix} =
+				\hat{\beta} = (X'X)^{-1}X'Y =
 				\begin{bmatrix}
-					-22,73333 \\
-					1,425
-				\end{bmatrix} =
-				\begin{bmatrix}
-					\hat{\beta_{0}} \\
-					\hat{\beta_{1}}
-				\end{bmatrix}
-			\]
-
-			Logo, podemos interpretar que, quando a receita líquida é igual a 0, o preço do ativo é, em média, de R\$ -22,73333. Além disso, quando a receita líquida aumenta em (1) mil reais, o preço do ativo aumenta, em média, em R\$ 1,425.
-
-		\end{solution}
-
-		\vspace{0.3cm}
-
-		\part
-
-		\begin{solution}
-
-			A variância dos estimadores pode ser calculada utilizando a seguinte fórmula:
-			\[VarCov = S^2 \times (X'X)^{-1}\]
-
-			Primeiramente precisamos calcular \(S^2\). Para isso, precisamos calcular o somatório do quadrado dos resíduos (SQR).
-			\[SQR = \sum (Y - \widehat{Y})^{2}\]
-			\[ [ 10 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25)]^{2} =  8,36176 \]
-			\[ [ 15 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 30)]^{2} =  25,16698 \]
-			\[ [ 30 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 35)]^{2} =  8,17005 \]
-			\[ [ 16 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 28)]^{2} =  1,36112 \]
-			\[ [ 20 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25)]^{2} =  50,52836 \]
-			\[ [ 12 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25)]^{2} =  0,79508 \]
-			\[ SQR = 94,38335\]
-
-			Logo, sabendo que \text{\large\(S^2 = \frac{SQR}{n-k}\)}:
-			\[S^{2} = \frac{94,38335}{6-2} = 23,59584\]
-
-			Agora podemos calcular a matriz \(VarCov\):
-			\[VarCov = 23,59584 \times (X'X)^{-1}\]
-			\[
-				VarCov =  \frac{23,59584}{6 \times 4784 - 168^2} \times
-				\begin{bmatrix}
-					4784 & -168 \\
-					-168 & 6
-				\end{bmatrix}
-			\]
-			\[
-				VarCov =
-				\begin{bmatrix}
-					235,17187 & -8,25854 \\
-					-8,25854  & 0,29495
-				\end{bmatrix}
-			\]
-
-			Portanto, temos:
-			\[Var(\hat{\beta_{0}}) = 235,17187\]
-			\[Var(\hat{\beta_{1}}) = 0,29495\]
-
-		\end{solution}
-
-		\vspace{0.3cm}
-
-		\part
-
-		\begin{solution}
-
-			\begin{center}
-				\begin{tabular}{|c|c|c|}
-					\hline
-					Preço (Y) & Receita Líquida (\(X_{1}\)) & Escolaridade (\(X_{2}\)) \\ \hline
-					10        & 25                          & 22                       \\ \hline
-					15        & 30                          & 20                       \\ \hline
-					30        & 35                          & 24                       \\ \hline
-					16        & 28                          & 16                       \\ \hline
-					20        & 25                          & 18                       \\ \hline
-					12        & 25                          & 24                       \\ \hline
-				\end{tabular}
-			\end{center}
-
-			Por se tratar de uma regressão múltipla, precisaremos novamente adotar uma abordagem matricial. As matrizes relevantes são:
-			\[
-				X =
-				\begin{bmatrix}
-					1 & 25 & 22 \\
-					1 & 30 & 20 \\
-					1 & 35 & 24 \\
-					1 & 28 & 16 \\
-					1 & 25 & 18 \\
-					1 & 25 & 24
-				\end{bmatrix} \quad
-				Y =
-				\begin{bmatrix}
-					10 \\
-					15 \\
-					30 \\
-					16 \\
-					20 \\
-					12
-				\end{bmatrix} \quad
-				X' =
-				\begin{bmatrix}
-					1  & 1  & 1  & 1  & 1  & 1  \\
-					25 & 30 & 35 & 28 & 25 & 25 \\
-					22 & 20 & 24 & 16 & 18 & 24
-				\end{bmatrix}
-			\]
-
-			Primeiramente obtemos \(X'X\):
-			\[
-				X'X =
-				\begin{bmatrix}
-					6   & 168  & 124  \\
-					168 & 4784 & 3488 \\
-					124 & 3488 & 2616
-				\end{bmatrix}
-			\]
-
-			Em seguida obtemos também o determinante da matriz \(X'X\), que é igual a:
-			\[det(X'X) = 24064\]
-
-			Precisamos agora obter a matriz adjunta, que é simplesmente a transposta da matriz dos cofatores. Vamos agora calcular cada um dos cofatores.
-
-			\[ C_{11} = -1^{2} \times det
-				\begin{bmatrix}
-					4784 & 3488 \\
-					3488 & 2616
-				\end{bmatrix}
-				= 348800
-				\qquad
-				C_{12} = -1^{3} \times det
-				\begin{bmatrix}
-					168 & 3488 \\
-					124 & 2616
-				\end{bmatrix}
-				= -6976
-			\]
-
-			\[ C_{13} = -1^{4} \times det
-				\begin{bmatrix}
-					168 & 4784 \\
-					124 & 3488
-				\end{bmatrix}
-				= -7232
-				\qquad
-				C_{22} = -1^{4} \times det
-				\begin{bmatrix}
-					6   & 124  \\
-					124 & 2616
-				\end{bmatrix}
-				= 320
-			\]
-
-			\[ C_{23} = -1^{5} \times det
-				\begin{bmatrix}
-					6   & 168  \\
-					124 & 3488
-				\end{bmatrix}
-				= -96
-				\qquad
-				C_{33} = -1^{6} \times det
-				\begin{bmatrix}
-					6   & 168  \\
-					168 & 4784
-				\end{bmatrix}
-				= 480
-			\]
-
-			Assim obtemos a matriz  dos cofatores:
-
-			\[ Cof(X'X) =
-				\begin{bmatrix}
-					348800 & -6976 & -7232 \\
-					-6976  & 320   & -96   \\
-					-7232  & -96   & 480
-				\end{bmatrix}
-			\]
-
-			Dessa forma podemos obter a matriz inversa de \(X'X\) da seguinte forma:
-			\[(X'X)^{-1} = \frac{1}{det(X'X)} \times Adj(X'X)
-			\]
-
-			Onde \(Adj(X'X)\) é a matriz transposta da matriz dos cofatores. Como a matriz dos cofatores é simétrica, a matriz adjunta é igual a matriz dos cofatores.
-
-			Ou seja:
-			\[(X'X)^{-1} =
-				\frac{1}{24064} \times
-				\begin{bmatrix}
-					348800 & -6976 & -7232 \\
-					-6976  & 320   & -96   \\
-					-7232  & -96   & 480
-				\end{bmatrix}
-			\]
-
-			Obtemos agora a matriz \(X'Y\):
-			\[
-				X'Y =
-				\begin{bmatrix}
-					103  \\
-					2998 \\
-					2144
-				\end{bmatrix}
-			\]
-
-			Podemos então calcular os coeficientes \(\hat{\beta}\):
-			\[(X'X)^{-1}X'Y = \hat{\beta} =
-				\frac{1}{24064} \times
-				\begin{bmatrix}
-					348800 & -6976 & -7232 \\
-					-6976  & 320   & -96   \\
-					-7232  & -96   & 480
-				\end{bmatrix} \times
-				\begin{bmatrix}
-					103  \\
-					2998 \\
-					2144
-				\end{bmatrix}
-			\]
-			\[(X'X)^{-1}X'Y = \hat{\beta} =
-				\frac{1}{24064} \times
-				\begin{bmatrix}
-					-493056 \\
-					35008   \\
-					-3584
-				\end{bmatrix} =
-				\begin{bmatrix}
-					-20,48936 \\
-					1,45479   \\
-					-0,14894
+					25,56378 \\
+					-0,05885 \\
+					-0,11728 \\
 				\end{bmatrix} =
 				\begin{bmatrix}
 					\hat{\beta_{0}} \\
 					\hat{\beta_{1}} \\
-					\hat{\beta_{2}}
+					\hat{\beta_{2}} \\
 				\end{bmatrix}
 			\]
 
-		\end{solution}
+			Portanto, podemos escrever nosso sistema de equações da seguinte forma:
 
-		\vspace{0.3cm}
+			\begin{equation*}
+				\begin{cases}
+					PrecoAcoes & = 25,56378 - 0,11728 \times GastoPares, \text{quando for empresa de grande porte}     \\
+					PrecoAcoes & = 25,56378 - 0,17613 \times GastoPares, \text{quando não for empresa de grande porte}
+				\end{cases}
+			\end{equation*}
 
-		\part
+			De forma que este modelo é, de fato, uma dummy de interação e o preço das ações evolui de forma diferente quando o \textit{Gasto dos Pares} interage com a dummy que indica se é uma \textit{Empresa de grande porte}.
 
-		\begin{solution}
+			Sabemos que o teste t, neste caso, é dado por \(\frac{\hat{\beta_{1}} - \beta^{H0}_{1}}{\sqrt{\widehat{Var(\beta_{1})}}}\), e que \(\beta^{H0}_{1} = 0\).
 
-			A literatura sugere uma relação positiva entre a escolaridade e o preço do ativo, ou seja, espera-se que \(\hat{\beta_{2}} > 0\). Entretanto, o valor obtido para \(\hat{\beta_{2}}\) foi \(-0,14894\), indicando uma relação negativa entre as variáveis. Existem evidências de que a hipótese de exogeneidade foi violada, uma vez que \(\hat{\beta}^{simples}_{1} \neq \hat{\beta}^{multipla}_{1}\).
+			Precisamos calcular, portanto, \(\widehat{Var(\beta_{1}})\). Para isso utilizaremos a matriz de variância-covariância. Precisamos, então, calcular o valor de \(S^{2}\).
 
-		\end{solution}
-
-		\vspace{0.3cm}
-
-		\part
-
-		\begin{solution}
-
-			Para calcularmos a variância dos estimadores, precisamos novamente calcular \(S^2\). Para isso, precisamos calcular o somatório do quadrado dos resíduos (SQR).
-			\[SQR = \sum (Y - \widehat{Y})^{2}\]
-			\[ [ 10 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25 + \hat{\beta_{2}} \times 22)]^{2} =  6,77930 \]
-			\[ [ 15 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 30 + \hat{\beta_{2}} \times 20)]^{2} =  26,78621 \]
-			\[ [ 30 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 35 + \hat{\beta_{2}} \times 24)]^{2} =  9,89901 \]
-			\[ [ 16 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 28 + \hat{\beta_{2}} \times 16)]^{2} =  3,46600 \]
-			\[ [ 20 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25 + \hat{\beta_{2}} \times 18)]^{2} =  46,24721 \]
-			\[ [ 12 - (\hat{\beta_{0}} + \hat{\beta_{1}} \times 25 + \hat{\beta_{2}} \times 24)]^{2} =  0,09353 \]
-			\[ SQR = 93,27126\]
-
-			Logo, sabendo que \text{\large\(S^2 = \frac{SQR}{n-k}\)}:
-			\[S^{2} = \frac{93,27126}{6-3} = 31,09042\]
-
-			Sabendo também que \(VarCov = S^2 \times (X'X)^{-1}\), temos que:
-			\[VarCov = 31,09042 \times (X'X)^{-1}\]
-			\[VarCov =
-				\frac{31,09042}{24064} \times
-				\begin{bmatrix}
-					348800 & -6976 & -7232 \\
-					-6976  & 320   & -96   \\
-					-7232  & -96   & 480
-				\end{bmatrix}
-			\]
 			\[
-				VarCov =
+				S^{2} = \frac{SQR}{n - k} \qquad
+				SQR = \sum (Y - \hat{Y})^{2}
+			\]
+			\begin{align*}
+				[21,0 - (25,56378 - 0,05885 \times 0  - 0,11728 \times 35 )]^{2} & = 0,21066 \\
+				[23,5 - (25,56378 - 0,05885 \times 0  - 0,11728 \times 28 )]^{2} & = 1,48855 \\
+				[14,6 - (25,56378 - 0,05885 \times 60 - 0,11728 \times 60 )]^{2} & = 0,15680 \\
+				[13,1 - (25,56378 - 0,05885 \times 71 - 0,11728 \times 71 )]^{2} & = 0,00172 \\
+				[20,0 - (25,56378 - 0,05885 \times 0  - 0,11728 \times 44 )]^{2} & = 0,16278 \\
+				[18,1 - (25,56378 - 0,05885 \times 45 - 0,11728 \times 45 )]^{2} & = 0,21351 \\
+				[20,2 - (25,56378 - 0,05885 \times 0  - 0,11728 \times 58 )]^{2} & = 2,06917 \\
+				[18,5 - (25,56378 - 0,05885 \times 0  - 0,11728 \times 44 )]^{2} & = 3,62316 \\
+			\end{align*}
+			\[ SQR = 7,92635 \]
+			\[ S^{2} = \frac{SQR}{n - k} = \frac{7,92635}{8 - 3} = 1,58527 \]
+
+			Sabemos também que:
+			\[
+				(X'X)^{-1} = \frac{1}{36582694}
 				\begin{bmatrix}
-					450,64572 & -9,01291 & -9,34366 \\
-					-9,01291  & 0,41344  & -0,12403 \\
-					-9,34366  & -0,12403 & 0,62015
+					98607170 & 602074 & -2229194 \\
+					602074   & 11063  & -17658   \\
+					-2229194 & -17658 & 54352    \\
 				\end{bmatrix}
 			\]
 
-			Portanto, temos:
-			\[Var(\hat{\beta_{0}}) = 450,64572\]
-			\[Var(\hat{\beta_{1}}) = 0,41344\]
-			\[Var(\hat{\beta_{2}}) = 0,62015\]
+			E sabemos que a matriz de variância-covariância é dada por \(VarCov = S^{2}(X'X)^{-1}\).
+
+			Portanto, utilizando o valor apropriado da matriz de variância-covariância, temos que o valor de \(\widehat{Var(\beta_{1})}\) é:
+			\[ \widehat{Var(\beta_{1})} = 1,58527 \times \frac{11063}{36582694} = 0,00048 \]
+
+			Logo, o valor do teste t é dado por:
+			\[ t = \frac{-0,05885}{\sqrt{0,00048}} = -2,68612 \]
+
+			Verificando numa tabela do teste t para o nível de significância de 10\% e com \((n - k) = 5\) graus de liberdade, temos que:
+			\[ t^{*} = 2,015 \]
+
+			Como:
+			\[\lvert -2,68612 \rvert > \lvert 2,015 \rvert\]
+
+			Rejeitamos a hipótese nula ao nível de confiança de 90\%.
 
 		\end{solution}
 
 	\end{parts}
-
-	\question Conforme Exercício 2
-
-	\begin{solution}
-		Inicialmente utilizamos nossos conhecimentos de regressão simples e sabemos que \text{\large\(\hat{\beta_{1}} = \frac{n \sum XY - \sum X \sum Y}{n \sum X^{2} - (\sum X)^{2}}\)} e que \(\hat{\beta_{0}} = \bar{Y} - \hat{\beta_{1}} \times \bar{X}\).
-
-		Agora precisamos mostrar como calcular os os estimadores de MQO utilizando uma abordagem matricial. Sabendo que \(\sum{u_{i}^{2}} = u'u\), podemos escrever o seguinte:
-
-		\[min\sum{u_{1}^{2}} = min\: u'u\]
-
-		Como \(u' = (Y - X\beta)'\) e \(u = (Y - X\beta)\) temos:
-
-		\[S(\beta) = (Y - X\beta)'(Y - X\beta)\]
-
-		Aplicando a propriedade distributiva:
-
-		\[S(\beta) = Y'Y - Y'X\beta - \beta'X'Y + \beta'X'X\beta\]
-
-		Note que: \(Y'X\beta = \beta'X'Y\). Logo:
-
-		\[S(\beta) = Y'Y - 2\beta'X'Y + \beta'X'X\beta\]
-
-		Resolvendo a condição de primeira ordem, ou seja, para encontrarmos o mínimo local desta função igualamos sua primeira derivada parcial à zero:
-
-		\[\frac{\partial S(\beta)}{\partial \beta'} = 0\]
-		\[\frac{\partial S(\beta)}{\partial \beta'} = -2X'Y + 2X'X\beta = 0\]
-		\[-2X'Y + 2X'X\beta = 0\]
-		\[-2X'Y = -2X'X\beta\]
-		\[X'Y = X'X\beta\]
-		\[X'X\hat{\beta} = X'Y\]
-
-		Podemos multiplicar os dois lados desta equação por \((X'X)^{-1}\) para obtermos o seguinte:
-
-		\[(X'X)^{-1}(X'X)\hat{\beta} = (X'X)^{-1}X'Y\]
-
-		Como \((X'X)^{-1}(X'X) = I\), temos:
-
-		\[I\hat{\beta} = (X'X)^{-1}X'Y\]
-		\[\hat{\beta} = (X'X)^{-1}X'Y\]
-
-		Desta abordagem matricial temos as seguintes matrizes para calcular os estimadores de interesse:
-		\[ X =
-			\begin{bmatrix}
-				1   & X_{1} \\
-				1   & X_{2} \\
-				... & ...   \\
-				1   & X_{n}
-			\end{bmatrix} \quad
-			Y =
-			\begin{bmatrix}
-				Y_{1} \\
-				Y_{2} \\
-				...   \\
-				Y_{n}
-			\end{bmatrix} \quad
-			X' =
-			\begin{bmatrix}
-				1     & 1     & ... & 1     \\
-				X_{1} & X_{2} & ... & X_{n}
-			\end{bmatrix}
-		\]
-
-		Podemos obter, então, a matriz \(X'X\):
-		\[  X'X =
-			\begin{bmatrix}
-				n      & \sum X     \\
-				\sum X & \sum X^{2}
-			\end{bmatrix}
-		\]
-		Invertendo a matriz \(X'X\) obtemos:
-		\[(X'X)^{-1} = \frac{1}{n \sum X^{2} - (\sum X)^{2}} \times
-			\begin{bmatrix}
-				\sum X^{2} & -\sum X \\
-				-\sum X    & n
-			\end{bmatrix}
-		\]
-		Obtemos também a matriz \(X'Y\):
-		\[  X'Y =
-			\begin{bmatrix}
-				\sum Y \\
-				\sum XY
-			\end{bmatrix}
-		\]
-
-		Por fim, obtemos o produto de \((X'X)^{-1}\) por \(X'Y\):
-		\[(X'X)^{-1}X'Y = \hat{\beta} =
-			\frac{1}{n \sum X^{2} - (\sum X)^{2}} \times
-			\begin{bmatrix}
-				\sum X^{2}\sum Y - \sum X\sum XY \\
-				n\sum XY - \sum X\sum Y
-			\end{bmatrix} =
-			\begin{bmatrix}
-				\hat{\beta_{0}} \\
-				\hat{\beta_{1}}
-			\end{bmatrix}
-		\]
-
-		\[\hat{\beta_{0}} = \frac{\sum X^{2}\sum Y - \sum X\sum XY}{n \sum X^{2} - (\sum X)^{2}}\]
-		\[\hat{\beta_{1}} = \frac{n\sum XY - \sum X\sum Y}{n \sum X^{2} - (\sum X)^{2}}\]
-
-		O coeficiente \(\hat{\beta_{1}}\) calculado pela abordagem matricial concorda com o valor conhecido de \(\hat{\beta_{1}}\). Entretanto precisamos mostrar que o valor obtido de \(\hat{\beta_{0}}\) também é equivalente ao valor conhecido. Podemos adotar uma prova por contradição, para fazer isso escreveremos que o \(\hat{\beta_{0}}\) obtido pela via matricial é igual ao valor conhecido de \(\hat{\beta_{0}}\).
-
-		\[ \frac{\sum X^{2}\sum Y - \sum X\sum XY}{n\sum X^{2} - (\sum X)^{2}} = \bar{Y} - \hat{\beta_{1}}\bar{X} \]
-
-		Escrevendo \(\bar{Y}\) e \(\bar{X}\) em termos de somatórios e substituindo \(\hat{\beta_{1}}\) pela sua forma conhecida, temos:
-
-
-		\[ \frac{\sum X^{2}\sum Y - \sum X\sum XY}{n\sum X^{2} - (\sum X)^{2}} = \frac{\sum Y}{n} - \frac{n\sum XY - \sum X\sum Y}{n\sum X^{2} - (\sum X)^{2}} \times  \frac{\sum X}{n}\]
-		\[ \frac{\sum X^{2}\sum Y - \sum X\sum XY}{n\sum X^{2} - (\sum X)^{2}} + \frac{n \sum XY - \sum X\sum Y}{n\sum X^{2} - (\sum X)^{2}} \times \frac{\sum X}{n} = \frac{\sum Y}{n} \]
-		\[ \frac{\sum X^{2}\sum Y - \sum X\sum XY}{n\sum X^{2} - (\sum X)^{2}} + \frac{\sum X(n\sum XY - \sum X\sum Y)}{n(n \sum X^{2} - (\sum X)^{2})} = \frac{\sum Y}{n} \]
-		\[ \frac{n(\sum X^{2}\sum Y - \sum X\sum XY) + \sum X(n\sum XY - \sum X\sum Y)}{n(n \sum X^{2} - (\sum X)^{2})} = \frac{\sum Y}{n} \]
-		\[ \frac{n(\sum X^{2}\sum Y - \sum X\sum XY) + n\sum X\sum XY - \sum X\sum X\sum Y}{n(n \sum X^{2} - (\sum X)^{2})} = \frac{\sum Y}{n} \]
-		\[ \frac{n(\sum X^{2}\sum Y - \sum X\sum XY + \sum X\sum XY) - (\sum X)^{2}  \sum Y}{n(n \sum X^{2} - (\sum X)^{2})} = \frac{\sum Y}{n} \]
-		\[ \frac{n\sum X^{2}\sum Y - (\sum X)^{2}  \sum Y}{n(n\sum X^{2} - (\sum X)^{2})} = \frac{\sum Y}{n} \]
-		\[ \frac{n\sum X^{2}\sum Y - (\sum X)^{2}  \sum Y}{n\sum X^{2} - (\sum X)^{2}} = \sum Y \]
-		\[ n\sum X^{2}\sum Y - (\sum X)^{2}\sum Y = \sum Y(n \sum X^{2} - (\sum X)^{2})\]
-		\[ n\sum X^{2}\sum Y - (\sum X)^{2}\sum Y = n\sum Y\sum X^{2} - \sum Y(\sum X)^{2}\]
-		\[ n\sum X^{2}\sum Y - (\sum X)^{2}\sum Y = n\sum Y\sum X^{2} - (\sum X)^{2}\sum Y\]
-		\[ n\sum X^{2}\sum Y = n\sum Y\sum X^{2} \]
-		\[ n\sum X^{2}\sum Y = n\sum X^{2}\sum Y \]
-		\[ n = n\]
-
-		Portanto, o valor de \(\hat{\beta_{0}}\) obtido pela via matricial é equivalente ao valor conhecido de \(\hat{\beta_{0}}\).
-
-		Precisamos agora mostrar que, ao atendermos H1, os valores dos coeficiente obtidos são não viesados. Para esta condição ser satisfeita precisamos que \(\mathbb{E}(\hat{\beta}) = \beta\)
-
-		Sabemos que:
-		\[\hat{\beta} = (X'X)^{-1}X'Y\]
-
-		E sabemos que:
-		\[Y = X\beta + u\]
-
-		Substituindo \(Y\) na equação de \(\hat{\beta}\), temos:
-		\[\hat{\beta} = (X'X)^{-1}X'(X\beta + u)\]
-		\[\hat{\beta} = (X'X)^{-1}X'X\beta + (X'X)^{-1}X'u\]
-		\[\hat{\beta} = I\beta + (X'X)^{-1}X'u\]
-		\[\hat{\beta} = \beta + (X'X)^{-1}X'u\]
-		\[\mathbb{E}(\hat{\beta} \mid X) = \mathbb{E}(\beta + (X'X)^{-1}X'u \mid X)\]
-		\[\mathbb{E}(\hat{\beta} \mid X) = \mathbb{E}(\beta \mid X) + \mathbb{E}((X'X)^{-1}X' \mid X) \mathbb{E}(u \mid X)\]
-
-		Pela hipótese de exogeneidade sabemos que \(\mathbb{E}(u \mid X) = 0\), logo:
-		\[\mathbb{E}(\hat{\beta} \mid X) = \mathbb{E}(\beta \mid X) + \mathbb{E}((X'X)^{-1}X' \mid X) \times 0\]
-		\[\mathbb{E}(\hat{\beta} \mid X) = \mathbb{E}(\beta \mid X)\]
-		\[\mathbb{E}(\hat{\beta} \mid X) = \beta\]
-
-	\end{solution}
 
 \end{questions}
 \end{document}

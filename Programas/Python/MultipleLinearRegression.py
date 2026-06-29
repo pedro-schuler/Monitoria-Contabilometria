@@ -22,8 +22,8 @@ class LinearRegressionModel:
         second_independent_var,
         loglog=False,
         loglin=False,
-        precision=10,
-        lnprecision=100,
+        precision=5,
+        lnprecision=3,
         null_hypothesis=0,
         verbose=True,
     ):
@@ -508,9 +508,9 @@ class LinearRegressionModel:
 # Example usage
 if __name__ == "__main__":
     data = {
-        "Y": [20, 40, 5, 25, 2],
-        "X1": [8, 5, 15, 8, 20],
-        "X2": [0, 0, 1, 1, 0],
+        "Y": [21.0, 23.5, 14.6, 13.1, 20.0, 18.1, 20.2, 18.5],
+        "X1": [0, 0, 60, 71, 0, 45, 0, 0],
+        "X2": [35, 28, 60, 71, 44, 45, 58, 44],
     }
     model_verbose = LinearRegressionModel(
         data,

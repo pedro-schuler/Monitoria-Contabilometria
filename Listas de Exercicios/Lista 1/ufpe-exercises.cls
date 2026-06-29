@@ -1,7 +1,7 @@
 %% ======================================================================
 % ufpe-exercise.cls - Document class for UFPE exercises sheets
 % ======================================================================
-% Classe para formatação de questionários e folhas de quetões
+% Classe para formatação de questionários e folhas de questões
 % Versão 1.0 - Abril 2026
 % ======================================================================
 
@@ -45,7 +45,8 @@
 \RequirePackage{ninecolors}
 \RequirePackage{tabularray}
 \RequirePackage{graphicx}
-\RequirePackage{booktabs}
+%\RequirePackage{booktabs}
+\UseTblrLibrary{booktabs}
 
 % ======================================================================
 % CONFIGURAÇÃO DE FONTES
