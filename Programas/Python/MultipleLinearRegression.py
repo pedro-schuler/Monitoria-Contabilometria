@@ -509,15 +509,15 @@ class LinearRegressionModel:
 if __name__ == "__main__":
     data = {
         "Y": [21.0, 23.5, 14.6, 13.1, 20.0, 18.1, 20.2, 18.5],
-        "X1": [0, 0, 60, 71, 0, 45, 0, 0],
-        "X2": [35, 28, 60, 71, 44, 45, 58, 44],
+        "X1": [35, 28, 60, 71, 44, 45, 58, 44],
+        "X2": [5.0, 6.2, 9.5, 8.0, 7.9, 7.0, 8.5, 6.8],
     }
     model_verbose = LinearRegressionModel(
         data,
         "Y",
         "X1",
         "X2",
-        loglin=False,
+        loglin=True,
         verbose=True,
     )
     model_verbose.run_analysis()
