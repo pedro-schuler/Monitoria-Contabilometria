@@ -449,9 +449,9 @@ class LinearRegressionModel:
 # Exemplo de uso
 if __name__ == "__main__":
     data = {
-        "Y": [21.0, 23.5, 14.6, 13.1, 20.0, 18.1, 20.2, 18.5],
-        "X1": [35, 28, 60, 71, 44, 45, 58, 44],
+        "Y": [8, 10, 14, 12, 16],
+        "X1": [0, 0, 1, 0, 1],
     }
     # Exemplo de uso com saída detalhada
-    model = LinearRegressionModel(data, "Y", "X1", loglin=True, verbose=True)
+    model = LinearRegressionModel(data, "Y", "X1", loglin=False, verbose=True)
     model.run_all()
