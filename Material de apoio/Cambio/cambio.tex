@@ -43,7 +43,7 @@ Algumas vezes podemos nos deparar com cenários em que é necessário efetuar um
 Utilizando um modelo de regressão simples e assumindo que a variável X será multiplicada por uma constante \(\alpha\).
 
 Sabemos que:
-\[\hat{\beta_{1}} = \frac{n\sum{XY} - \sum{X}\sum{Y}}{n\sum{X^{2}}} - (\sum{X})^{2}\]
+\[\hat{\beta_{1}} = \frac{n\sum{XY} - \sum{X}\sum{Y}}{n\sum{X^{2}} - (\sum{X})^{2}} \]
 \[\hat{\beta_{0}} = \bar{Y} - \hat{\beta_{1}}\bar{X}\]
 
 Utilizando as propriedades do somatório e multiplicando X por uma constante \(\alpha\):
@@ -64,7 +64,7 @@ Aplicando a mesma lógica ao \(\beta_{0}\) e sabendo que ao multiplicarmos todos
 
 Onde \(\hat{\beta_{1}^{\ast}}\) e \(\hat{\beta_{0}^{\ast}}\) são os valores dos estimadores calculados antes da modificação da variável (multiplicação).
 
-Vemos assim que a variável que sofreu a modificação teve seu estimador multiplicado por \(\sfrac{1}{\alpha}\) enquanto o outro estimador permaneceu inalterado.
+Vemos assim que a variável que sofreu a modificação teve seu estimador multiplicado por \(\sfrac{1}{\alpha}\) enquanto o outro estimador permaneceu inalterado. Esse resultado também é válido para regressão múltipla. Nesse caso todos os outros estimadores permanecerão inalterados, somente a variável que sofreu a mudança e que terá seu estimador modificado. Isso é também válido para todos os resultados abaixo.
 
 \subsection{O \(R^{2}\)}
 Sabemos que:

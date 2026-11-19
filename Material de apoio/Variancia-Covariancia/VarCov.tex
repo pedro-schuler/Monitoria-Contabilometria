@@ -1,0 +1,56 @@
+\documentclass[12pt,a4paper,titlepage=false]{scrartcl}
+
+\usepackage{luatex85}
+\usepackage{fontspec}
+\usepackage[brazilian]{babel}
+\usepackage{microtype}
+\usepackage{indentfirst}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{csquotes}
+\usepackage{xfrac}
+\usepackage[automark]{scrlayer-scrpage}
+
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Courier New}
+
+\addtokomafont{disposition}{\boldmath}
+
+\clearpairofpagestyles
+\rohead{\pagemark}
+
+\onehalfspacing
+\recalctypearea
+\AfterCalculatingTypearea{\newgeometry{left=3cm, right=2cm, top=3cm, bottom=2cm}}
+
+\title{Matriz de Variância-Covariância}
+\author{Pedro Schuler \thanks{\href{mailto:pedro.schuler@ufpe.br}{pedro.schuler@ufpe.br}}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Forma da Matriz de Variância-Covariância}
+\[
+	VarCov =
+	\begin{bmatrix}
+		Var(\beta_{0})           & Cov(\beta_{0},\beta_{1}) & Cov(\beta_{0},\beta_{2}) & \cdots & Cov(\beta_{0},\beta_{n}) \\
+		Cov(\beta_{1},\beta_{0}) & Var(\beta_{1})           & Cov(\beta_{1},\beta_{2}) & \cdots & Cov(\beta_{1},\beta_{n}) \\
+		Cov(\beta_{2},\beta_{0}) & Cov(\beta_{2},\beta_{1}) & Var(\beta_{2})           & \cdots & Cov(\beta_{2},\beta_{n}) \\
+		\vdots                   & \vdots                   & \vdots                   & \ddots & \vdots                   \\
+		Cov(\beta_{n},\beta_{0}) & Cov(\beta_{n},\beta_{1}) & Cov(\beta_{n},\beta_{2}) & \cdots & Var(\beta_{n})
+	\end{bmatrix}~
+	\begin{array}{c}
+		(Var(\beta_{0}) \, e \, Cov(\beta_{0},\beta_{x})) \\
+		(Var(\beta_{1}) \, e \, Cov(\beta_{1},\beta_{x})) \\
+		(Var(\beta_{2}) \, e \, Cov(\beta_{2},\beta_{x})) \\
+		\\
+		(Var(\beta_{n}) \, e \, Cov(\beta_{n},\beta_{x})) \\
+	\end{array}
+\]
+
+\end{document}
